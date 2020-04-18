@@ -1,0 +1,43 @@
+$grid-breakpoints: ( xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1440px) !default;
+@mixin for-size($size) {
+    @if $size==mobile {
+        @media (max-width: map-get($map: $grid-breakpoints, $key: 'sm')) {
+            @content;
+        }
+    }
+    @else if $size==mobile-landscape {
+        @media (min-width: map-get($map: $grid-breakpoints, $key: 'sm')) {
+            @content;
+        }
+    }
+    @else if $size==mobile-landscape-max {
+        @media (min-width: map-get($map: $grid-breakpoints, $key: 'sm')) and (max-width: map-get($map: $grid-breakpoints, $key: 'md')) {
+            @content;
+        }
+    }
+    @else if $size==tablet-max {
+        @media (max-width: map-get($map: $grid-breakpoints, $key: 'md')) {
+            @content;
+        }
+    }
+    @else if $size==tablet-portrait {
+        @media (min-width: map-get($map: $grid-breakpoints, $key: 'md')) {
+            @content;
+        }
+    }
+    @else if $size==tablet-landscape {
+        @media (min-width: map-get($map: $grid-breakpoints, $key: 'lg')) {
+            @content;
+        }
+    }
+    @else if $size==desktop {
+        @media (min-width: map-get($map: $grid-breakpoints, $key: 'xl')) {
+            @content;
+        }
+    }
+    @else if $size==desktop-xxl {
+        @media (min-width: map-get($map: $grid-breakpoints, $key: 'xxl')) {
+            @content;
+        }
+    }
+}

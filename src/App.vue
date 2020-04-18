@@ -1,29 +1,84 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
+  <v-app class="app">
+    <v-system-bar
+      color="#fff"
+      :height="30"
+      :lights-out="false"
+      :window="false"
+      class="border-bottom"
+    >
+      <v-spacer></v-spacer>
+      <v-icon>mdi-wifi-strength-4</v-icon>
+      <v-icon>mdi-signal-cellular-outline</v-icon>
+      <v-icon>mdi-battery</v-icon>
+      <span class="ml-2">{{ time }}</span>
+    </v-system-bar>
+    <router-view></router-view>
+  </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "./components/HelloWorld.vue";
 
-@Component({
-  components: {
-    HelloWorld
+@Component
+export default class App extends Vue {
+  time = "00:00";
+
+  get currentTime() {
+    return this.time;
   }
-})
-export default class App extends Vue {}
+
+  checkTime(i: number | string) {
+    if (i < 10) {
+      i = "0" + i;
+    } // add zero in front of numbers < 10
+    return i;
+  }
+
+  startTime() {
+    const today = new Date();
+    const h = today.getHours();
+    let m = today.getMinutes();
+    let s = today.getSeconds();
+    m = this.checkTime(m);
+    s = this.checkTime(s);
+
+    this.time = h + ":" + m + ":" + s;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const t = setTimeout(this.startTime, 500);
+  }
+
+  mounted() {
+    this.startTime();
+  }
+}
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/Media.scss";
+
+$black: #2c3e50;
+$white: #fff;
+$white-grey: #f2f2f2;
+
+.app {
+  &.mode--dark {
+    background-color: $black;
+    color: $white;
+  }
+
+  &.mode--light {
+    background-color: aliceblue;
+    color: $black;
+  }
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: $black;
+  font-family: "Comic Neue", cursive, sans-serif !important;
+  // margin-top: 60px;
 }
 </style>
