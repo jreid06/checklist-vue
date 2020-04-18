@@ -40,8 +40,8 @@ export default class App extends Vue {
     const h = today.getHours();
     let m = today.getMinutes();
     let s = today.getSeconds();
-    m = this.checkTime(m);
-    s = this.checkTime(s);
+    m = this.checkTime(m) as number;
+    s = this.checkTime(s) as number;
 
     this.time = h + ":" + m + ":" + s;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
