@@ -32,7 +32,7 @@
       v-model="value"
       :weekdays="weekday"
       :type="type"
-      :events="events"
+      :events="allEvents"
       :event-overlap-mode="mode"
       :event-overlap-threshold="30"
       :event-color="getEventColor"
@@ -42,7 +42,8 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { CalendarEvent, CalendarTimestamp } from "vuetify";
+import { CalendarEvent } from "vuetify";
+import { Checklist } from "../classes/Checklist";
 
 @Component
 export default class ChecklistCalendar extends Vue {
@@ -56,66 +57,22 @@ export default class ChecklistCalendar extends Vue {
     { text: "Sat & Sun", value: [6, 0] }
   ];
   value = "";
-  events: CalendarEvent[] = [];
-  colors = [
-    "blue",
-    "indigo",
-    "deep-purple",
-    "cyan",
-    "green",
-    "orange",
-    "grey darken-1"
-  ];
-  names = [
-    "Meeting",
-    "Holiday",
-    "PTO",
-    "Travel",
-    "Event",
-    "Birthday",
-    "Conference",
-    "Party"
-  ];
 
-  getEvents({
-    start,
-    end
-  }: {
-    start: CalendarTimestamp;
-    end: CalendarTimestamp;
-  }) {
-    const events: CalendarEvent[] = [];
-
-    const min = new Date(`${start.date}T00:00:00`);
-    const max = new Date(`${end.date}T23:59:59`);
-    const days = (max.getTime() - min.getTime()) / 86400000;
-    const eventCount = this.rnd(days, days + 20);
-
-    for (let i = 0; i < eventCount; i++) {
-      const allDay = this.rnd(0, 3) === 0;
-      const firstTimestamp = this.rnd(min.getTime(), max.getTime());
-      const first = new Date(firstTimestamp - (firstTimestamp % 900000));
-      const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
-      const second = new Date(first.getTime() + secondTimestamp);
-
-      events.push({
-        name: this.names[this.rnd(0, this.names.length - 1)],
-        start: this.formatDate(first, !allDay),
-        end: this.formatDate(second, !allDay),
-        color: this.colors[this.rnd(0, this.colors.length - 1)]
-      });
-    }
-
-    this.events = events;
+  get allEvents(): CalendarEvent[] {
+    const checklists = this.$store.getters.getChecklists as Checklist[];
+    return checklists.map(c => {
+      return {
+        name: c.title,
+        start: c.dates.startDate,
+        end: c.dates.endDate,
+        color: c.color
+      } as CalendarEvent;
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getEventColor(event: any) {
     return event.color;
-  }
-
-  rnd(a: number, b: number) {
-    return Math.floor((b - a + 1) * Math.random()) + a;
   }
 
   formatDate(a: Date, withTime: boolean) {

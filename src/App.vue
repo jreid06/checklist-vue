@@ -7,9 +7,11 @@
       :window="false"
       class="border-bottom"
     >
+      <router-link :to="{ name: 'Home' }">
+        <v-icon>mdi-home-variant-outline</v-icon>
+      </router-link>
       <v-spacer></v-spacer>
       <v-icon>mdi-wifi-strength-4</v-icon>
-      <v-icon>mdi-signal-cellular-outline</v-icon>
       <v-icon>mdi-battery</v-icon>
       <span class="ml-2">{{ time }}</span>
     </v-system-bar>
@@ -39,13 +41,11 @@ export default class App extends Vue {
     const today = new Date();
     const h = today.getHours();
     let m = today.getMinutes();
-    let s = today.getSeconds();
     m = this.checkTime(m) as number;
-    s = this.checkTime(s) as number;
 
-    this.time = h + ":" + m + ":" + s;
+    this.time = h + ":" + m;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const t = setTimeout(this.startTime, 500);
+    const t = setTimeout(this.startTime, 1500);
   }
 
   mounted() {

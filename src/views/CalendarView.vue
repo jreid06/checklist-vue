@@ -13,30 +13,32 @@
           <ChecklistCalendar />
         </b-col>
         <b-col>
-          <v-card class="mx-auto" max-width="400" tile>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>Single-line item</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+          <v-card
+            class="mx-auto mb-4"
+            max-width="400"
+            tile
+            v-for="checklist in checklists"
+            :key="checklist.id"
+          >
+            <v-list-item class="grow">
+              <v-list-item-avatar :color="checklist.color">
+              </v-list-item-avatar>
 
-            <v-list-item two-line>
               <v-list-item-content>
-                <v-list-item-title>Two-line item</v-list-item-title>
-                <v-list-item-subtitle>Secondary text</v-list-item-subtitle>
+                <v-list-item-title>{{ checklist.title }}</v-list-item-title>
               </v-list-item-content>
-            </v-list-item>
 
-            <v-list-item three-line>
-              <v-list-item-content>
-                <v-list-item-title>Three-line item</v-list-item-title>
-                <v-list-item-subtitle>
-                  Secondary line text Lorem ipsum dolor sit amet,
-                </v-list-item-subtitle>
-                <v-list-item-subtitle>
-                  consectetur adipiscing elit.
-                </v-list-item-subtitle>
-              </v-list-item-content>
+              <v-row align="center" justify="end" class="pr-2">
+                <v-icon class="mr-1">mdi-checkbox-marked-circle</v-icon>
+                <span class="subheading mr-2">{{
+                  checklist.completeItems().length
+                }}</span>
+                <span class="mr-1">·</span>
+                <v-icon class="mr-1">mdi-close-outline</v-icon>
+                <span class="subheading">{{
+                  checklist.inCompleteItems().length
+                }}</span>
+              </v-row>
             </v-list-item>
           </v-card>
         </b-col>
@@ -52,8 +54,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import ChecklistCalendar from "@/components/Calendar.vue";
 import ChecklistDialog from "@/components/ChecklistDialog.vue";
-import { AppIChecklist, Checklist } from "@/classes/Checklist";
-import { LocalStorageService } from "@/services/LocalStorageService";
+import { Checklist } from "../classes/Checklist";
 
 @Component({
   components: {
@@ -64,30 +65,12 @@ import { LocalStorageService } from "@/services/LocalStorageService";
 export default class CalendarView extends Vue {
   isDialogOpen = false;
 
+  get checklists(): Checklist[] {
+    return this.$store.getters.getChecklists;
+  }
+
   toggleChecklistDialog(): void {
     this.isDialogOpen = !this.isDialogOpen;
-  }
-  createChecklistItem(): void {
-    const fakeItem: AppIChecklist = {
-      title: "Work In progress",
-      dateStart: new Date(),
-      dateEnd: this.addDays(new Date(), 1),
-      description: null
-    };
-
-    const fakeKey = "test-checklist";
-    const checklistItem = new Checklist(fakeItem);
-    console.log(checklistItem);
-    console.log(checklistItem.getName());
-    LocalStorageService.setData(fakeKey, checklistItem);
-
-    const parsedItem = LocalStorageService.getDataItem<Checklist>(
-      fakeKey,
-      Checklist
-    );
-
-    console.log(parsedItem);
-    console.log(parsedItem?.getName());
   }
 
   addDays(date: Date, days: number) {

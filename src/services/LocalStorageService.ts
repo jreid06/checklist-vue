@@ -5,7 +5,6 @@ export class LocalStorageService {
 
     static itemExists(key: string): boolean {
         if (localStorage.getItem(key)) return true;
-
         return false;
     }
 
@@ -17,7 +16,7 @@ export class LocalStorageService {
         localStorage.setItem(key, JSON.stringify(data));
     }
 
-    static getDataItem<T>(key: string, type: any): T | null {
+    static getDataAsType<T>(key: string, type: any): T | null {
         return new type(JSON.parse(localStorage.getItem(key)!));
     }
 
