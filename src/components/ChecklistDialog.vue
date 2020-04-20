@@ -101,6 +101,7 @@ import {
   ChecklistInterface
 } from "../classes/Checklist";
 import DateTimePicker from "@/components/DateTimePicker.vue";
+import { ChecklistFormData } from "@/classes/ChecklistFormData";
 
 @Component({
   components: {
@@ -116,26 +117,7 @@ export default class ChecklistDialog extends Vue {
     key: "temp-form-data--checklist-dialog",
     data: null
   };
-  formData: {
-    checklistName: string;
-    checklistColor: string;
-    checklistDescription: string | null;
-    checklistItems: ChecklistItem[];
-    checklistDates: ChecklistDateTimeObject;
-    checklistListItemName: string;
-  } = {
-    checklistName: "",
-    checklistColor: "",
-    checklistDescription: null,
-    checklistItems: [],
-    checklistDates: {
-      startTime: null,
-      startDate: null,
-      endTime: null,
-      endDate: null
-    },
-    checklistListItemName: ""
-  };
+  formData: ChecklistFormData = new ChecklistFormData(null);
 
   updateDateTimes(dateTimeObject: ChecklistDateTimeObject) {
     const { startTime, startDate, endTime, endDate } = dateTimeObject;
@@ -192,6 +174,7 @@ export default class ChecklistDialog extends Vue {
 
     const newChecklist = new Checklist(data);
     this.$store.dispatch("saveChecklist", newChecklist);
+    this.formData = new ChecklistFormData(null);
     this.emitClose();
   }
 }

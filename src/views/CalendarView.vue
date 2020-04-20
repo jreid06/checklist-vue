@@ -9,8 +9,10 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col>
-          <ChecklistCalendar />
+        <b-col cols="12">
+          <div class="m-auto" :style="{ maxWidth: '80%' }">
+            <ChecklistCalendar />
+          </div>
         </b-col>
         <b-col>
           <v-card

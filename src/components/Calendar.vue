@@ -36,7 +36,7 @@
       :event-overlap-mode="mode"
       :event-overlap-threshold="30"
       :event-color="getEventColor"
-      @change="getEvents"
+      @change="allEvents"
     ></v-calendar>
   </div>
 </template>
