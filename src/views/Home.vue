@@ -7,7 +7,6 @@
         <router-link :to="{ name: 'Calendar' }" class="btn btn-light mr-4">
           Calendar
         </router-link>
-        <router-link :to="{}" class="btn btn-dark">My Checklists</router-link>
       </div>
       <div class="app-home--image m-auto">
         <img alt="Vue logo" class="img-fluid" src="./../assets/3327590.jpg" />

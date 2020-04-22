@@ -10,8 +10,8 @@
       </b-row>
       <b-row>
         <b-col cols="12">
-          <div class="m-auto" :style="{ maxWidth: '80%' }">
-            <ChecklistCalendar />
+          <div class="m-auto">
+            <ChecklistCalendar @editChecklistItem="onEditChecklistItem" />
           </div>
         </b-col>
         <b-col>
@@ -48,6 +48,7 @@
     </b-container>
     <ChecklistDialog
       :dialogOpen="isDialogOpen"
+      :mode="dialogMode"
       @closeDialog="toggleChecklistDialog"
     />
   </div>
@@ -66,6 +67,7 @@ import { Checklist } from "../classes/Checklist";
 })
 export default class CalendarView extends Vue {
   isDialogOpen = false;
+  dialogMode = "create";
 
   get checklists(): Checklist[] {
     return this.$store.getters.getChecklists;
@@ -73,6 +75,17 @@ export default class CalendarView extends Vue {
 
   toggleChecklistDialog(): void {
     this.isDialogOpen = !this.isDialogOpen;
+
+    if (!this.isDialogOpen) {
+      this.$store.commit("removeEditableChecklist");
+      this.dialogMode = "create";
+    }
+  }
+
+  onEditChecklistItem(checklistItem: Checklist) {
+    this.dialogMode = "edit";
+    this.$store.commit("setEditableChecklist", checklistItem);
+    this.toggleChecklistDialog();
   }
 
   addDays(date: Date, days: number) {

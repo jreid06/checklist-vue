@@ -8,7 +8,8 @@ Vue.use(Vuex);
 export default new Vuex.Store<any>({
   state: {
     dataLoaded: false,
-    checklists: []
+    checklists: [],
+    selectedChecklist: null
   },
   getters: {
     checklists: (state: AppState) => {
@@ -16,6 +17,9 @@ export default new Vuex.Store<any>({
     },
     isDataLoaded: (state: AppState) => {
       return state.dataLoaded;
+    },
+    getEditableChecklist: (state: AppState) => {
+      return state.selectedChecklist;
     },
     getChecklists: (state: AppState) => {
       return state.checklists;
@@ -27,7 +31,13 @@ export default new Vuex.Store<any>({
   mutations: {
     addChecklist(state: AppState, checklist: Checklist) {
       state.checklists.push(checklist);
-    },  
+    },
+    setEditableChecklist(state: AppState, checklist: Checklist) {
+      state.selectedChecklist = checklist;
+    }, 
+    removeEditableChecklist(state: AppState) {
+      state.selectedChecklist = null;
+    }, 
     toggleLoadState(state: AppState) {
       state.dataLoaded = !state.dataLoaded;
     },
@@ -61,4 +71,5 @@ interface VueXCustom extends StoreOptions<any> {
 interface AppState {
     checklists: Checklist[],
     dataLoaded: boolean;
+    selectedChecklist: Checklist | null;
   }

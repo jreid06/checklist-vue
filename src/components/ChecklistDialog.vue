@@ -13,6 +13,7 @@
                 label="Checklist Name"
                 required
               ></v-text-field>
+              <v-divider></v-divider>
             </v-col>
             <v-col cols="12" class="text-left">
               <h6>Checklist Colour</h6>
@@ -20,14 +21,18 @@
                 v-model="formData.checklistColor"
                 class="checklist-dialog-form-item--color-picker"
                 hide-inputs
+                hide-canvas
+                width="100%"
               ></v-color-picker>
-              <br />
+              <v-divider></v-divider>
               <v-text-field
                 label="Selected Colour HEX Code"
                 :value="formData.checklistColor"
+                readonly
               ></v-text-field>
             </v-col>
             <v-col cols="12">
+              <!-- <v-divider></v-divider> -->
               <div class="">
                 <div class="d-flex">
                   <div class="flex-grow-1 pr-4">
@@ -35,6 +40,7 @@
                       v-model="formData.checklistListItemName"
                       label="Checklist item name"
                       required
+                      @keyup.13="addChecklistItem"
                     ></v-text-field>
                   </div>
                   <div class="d-flex align-items-center">
@@ -56,12 +62,36 @@
                     </v-chip>
                   </template>
                   <template v-else>
-                    <v-alert class="p-1 m-auto" type="info" :width="'60%'">
+                    <v-alert
+                      class=""
+                      type="info"
+                      border="top"
+                      width="100%"
+                      colored-border
+                      elevation="2"
+                    >
                       No list items created
                     </v-alert>
                   </template>
                 </div>
               </div>
+              <!-- <v-divider></v-divider> -->
+            </v-col>
+            <v-col cols="12">
+              <!-- <v-alert
+                class="mb-2"
+                type="info"
+                max-height="60"
+                border="top"
+                width="100%"
+                colored-border
+                elevation="2"
+              >
+                Use controls below to select <b>Start</b> &amp; <b>End</b> dates
+                for this checklist
+              </v-alert> -->
+              <v-divider></v-divider>
+              <DateTimePicker @dateTimeChange="updateDateTimes" />
             </v-col>
             <v-col cols="12">
               <v-textarea
@@ -70,15 +100,6 @@
                 auto-grow
                 v-model="formData.checklistDescription"
               ></v-textarea>
-            </v-col>
-            <v-col cols="12">
-              <v-alert type="info">
-                Use controls below to select <b>Start</b> &amp; <b>End</b> dates
-                for this checklist
-              </v-alert>
-            </v-col>
-            <v-col cols="12">
-              <DateTimePicker @dateTimeChange="updateDateTimes" />
             </v-col>
           </v-row>
         </v-container>
@@ -111,6 +132,8 @@ import { ChecklistFormData } from "@/classes/ChecklistFormData";
 export default class ChecklistDialog extends Vue {
   @Prop({ default: false }) dialogOpen!: boolean;
   @Prop({ default: "700px" }) maxWidth!: string;
+  @Prop({ default: "create" }) mode!: string;
+  @Prop({ default: 0 }) editChecklistId!: number;
 
   formDataSaved = false;
   tempFormData = {
@@ -118,6 +141,14 @@ export default class ChecklistDialog extends Vue {
     data: null
   };
   formData: ChecklistFormData = new ChecklistFormData(null);
+
+  get dialogMode(): string {
+    return this.mode;
+  }
+
+  get editableChecklist(): Checklist | undefined {
+    return this.$store.getters.getEditableChecklist;
+  }
 
   updateDateTimes(dateTimeObject: ChecklistDateTimeObject) {
     const { startTime, startDate, endTime, endDate } = dateTimeObject;
@@ -179,16 +210,4 @@ export default class ChecklistDialog extends Vue {
   }
 }
 </script>
-<style lang="scss">
-.checklist-dialog-form-item {
-  &--color-picker {
-    max-width: 100% !important;
-    > .v-color-picker__canvas {
-      width: 100% !important;
-      > canvas {
-        width: 100%;
-      }
-    }
-  }
-}
-</style>
+<style lang="scss"></style>

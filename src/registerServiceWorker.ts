@@ -21,6 +21,11 @@ if (process.env.NODE_ENV === "production") {
     },
     updated() {
       console.log("New content is available; please refresh.");
+      setTimeout(() => {
+        console.log('reloading in a few seconds');
+        window.location.reload(true);
+      }, 4000);
+     
     },
     offline() {
       console.log(
