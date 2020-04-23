@@ -21,6 +21,7 @@
             tile
             v-for="checklist in checklists"
             :key="checklist.id"
+            @click="onEditChecklistItem(checklist)"
           >
             <v-list-item class="grow">
               <v-list-item-avatar :color="checklist.color">
