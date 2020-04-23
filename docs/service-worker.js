@@ -14,16 +14,12 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.5b7e3c950d886183501c3fd131161807.js"
+  "/precache-manifest.822f1d159a102e1448dbb5574b2664ed.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "checklist-calendar-app"});
 
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
+workbox.core.skipWaiting();
 
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to
