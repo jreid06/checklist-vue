@@ -96,7 +96,7 @@ interface ChecklistCalendarEvent extends CalendarEvent {
 
 @Component
 export default class ChecklistCalendar extends Vue {
-  type = "month";
+  type = "week";
   typeToLabel = {
     month: "Month",
     week: "Week",
@@ -178,8 +178,7 @@ export default class ChecklistCalendar extends Vue {
     this.$emit("editChecklistItem", checklist);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getEventColor(event: any) {
+  getEventColor(event: ChecklistCalendarEvent) {
     return event.color;
   }
 

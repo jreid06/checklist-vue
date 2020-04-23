@@ -9,12 +9,12 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col cols="12">
+        <b-col cols="12" lg="8">
           <div class="m-auto">
             <ChecklistCalendar @editChecklistItem="onEditChecklistItem" />
           </div>
         </b-col>
-        <b-col>
+        <b-col lg="4">
           <v-card
             class="mx-auto mb-4"
             max-width="400"
@@ -67,10 +67,17 @@ import { Checklist } from "../classes/Checklist";
 })
 export default class CalendarView extends Vue {
   isDialogOpen = false;
-  dialogMode = "create";
 
   get checklists(): Checklist[] {
     return this.$store.getters.getChecklists;
+  }
+
+  get dialogMode(): "create" | "edit" {
+    return this.editableChecklist ? "edit" : "create";
+  }
+
+  get editableChecklist(): boolean {
+    return !!this.$store.getters.getEditableChecklist;
   }
 
   toggleChecklistDialog(): void {
@@ -78,12 +85,10 @@ export default class CalendarView extends Vue {
 
     if (!this.isDialogOpen) {
       this.$store.commit("removeEditableChecklist");
-      this.dialogMode = "create";
     }
   }
 
   onEditChecklistItem(checklistItem: Checklist) {
-    this.dialogMode = "edit";
     this.$store.commit("setEditableChecklist", checklistItem);
     this.toggleChecklistDialog();
   }

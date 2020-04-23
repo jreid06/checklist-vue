@@ -38,6 +38,13 @@ export default new Vuex.Store<any>({
     removeEditableChecklist(state: AppState) {
       state.selectedChecklist = null;
     }, 
+    updateChecklist(state: AppState, checklist: Checklist) {
+      state.checklists.map((c) => {
+        if (c.id === checklist.id) {
+          c = checklist;
+        }
+      })
+    }, 
     toggleLoadState(state: AppState) {
       state.dataLoaded = !state.dataLoaded;
     },
@@ -58,6 +65,10 @@ export default new Vuex.Store<any>({
     },
     saveChecklist({commit, dispatch}, checklist: Checklist) {
       commit('addChecklist', checklist);
+      dispatch('updateChecklistsInStorage');
+    },
+    updateChecklist({commit, dispatch}, checklist: Checklist) {
+      commit('updateChecklist', checklist);
       dispatch('updateChecklistsInStorage');
     }
   },

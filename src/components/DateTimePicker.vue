@@ -128,20 +128,18 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue, Watch, Prop } from "vue-property-decorator";
+import { ChecklistDateTimeObject } from "../classes/Checklist";
 
 @Component
 export default class DateTimePicker extends Vue {
-  picker: {
-    startTime: string | null;
-    startDate: string | null;
-    endTime: string | null;
-    endDate: string | null;
-  } = {
-    startDate: null,
-    startTime: null,
-    endDate: null,
-    endTime: null
+  @Prop({ required: true }) dateObject!: ChecklistDateTimeObject;
+  @Prop({ default: false }) resetPicker!: boolean;
+  picker: ChecklistDateTimeObject = {
+    startDate: this.pickerDates.startDate,
+    startTime: this.pickerDates.startTime,
+    endDate: this.pickerDates.endDate,
+    endTime: this.pickerDates.endTime
   };
 
   startDate = false;
@@ -149,10 +147,33 @@ export default class DateTimePicker extends Vue {
 
   endDate = false;
   endTime = false;
+  counter = 0;
 
   @Watch("picker", { deep: true })
   onDateTimeChange() {
     this.$emit("dateTimeChange", this.picker);
+  }
+
+  @Watch("dateObject", { deep: true, immediate: true })
+  onDateTimeUpdate(dateObject: ChecklistDateTimeObject) {
+    this.picker = dateObject;
+  }
+
+  @Watch("resetPicker", { immediate: true })
+  onDateResetChange(reset: boolean) {
+    if (reset) {
+      this.picker = this.dateObject;
+      this.$emit("pickerReset");
+    }
+  }
+
+  get pickerDates(): ChecklistDateTimeObject {
+    return {
+      startDate: this.dateObject.startDate,
+      startTime: this.dateObject.startTime,
+      endDate: this.dateObject.endDate,
+      endTime: this.dateObject.endTime
+    };
   }
 }
 </script>

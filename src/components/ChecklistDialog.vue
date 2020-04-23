@@ -2,7 +2,7 @@
   <v-dialog v-model="dialogOpen" persistent :max-width="maxWidth">
     <v-card>
       <v-card-title>
-        <span class="headline">Create Checklist</span>
+        <span class="headline text-capitalize">{{ mode }} Checklist</span>
       </v-card-title>
       <v-card-text>
         <v-container>
@@ -32,7 +32,6 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12">
-              <!-- <v-divider></v-divider> -->
               <div class="">
                 <div class="d-flex">
                   <div class="flex-grow-1 pr-4">
@@ -75,23 +74,15 @@
                   </template>
                 </div>
               </div>
-              <!-- <v-divider></v-divider> -->
             </v-col>
             <v-col cols="12">
-              <!-- <v-alert
-                class="mb-2"
-                type="info"
-                max-height="60"
-                border="top"
-                width="100%"
-                colored-border
-                elevation="2"
-              >
-                Use controls below to select <b>Start</b> &amp; <b>End</b> dates
-                for this checklist
-              </v-alert> -->
               <v-divider></v-divider>
-              <DateTimePicker @dateTimeChange="updateDateTimes" />
+              <DateTimePicker
+                :dateObject="formData.checklistDates"
+                :resetPicker="reset"
+                @dateTimeChange="updateDateTimes"
+                @pickerReset="reset = false"
+              />
             </v-col>
             <v-col cols="12">
               <v-textarea
@@ -108,13 +99,15 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="emitClose">Close</v-btn>
-        <v-btn color="blue darken-1" text @click="saveChecklist">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="handleChecklistSubmission">
+          {{ buttonActionText }}
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import {
   Checklist,
   ChecklistDateTimeObject,
@@ -122,7 +115,10 @@ import {
   ChecklistInterface
 } from "../classes/Checklist";
 import DateTimePicker from "@/components/DateTimePicker.vue";
-import { ChecklistFormData } from "@/classes/ChecklistFormData";
+import {
+  ChecklistFormData,
+  ChecklistFormDataInterface
+} from "@/classes/ChecklistFormData";
 
 @Component({
   components: {
@@ -132,7 +128,7 @@ import { ChecklistFormData } from "@/classes/ChecklistFormData";
 export default class ChecklistDialog extends Vue {
   @Prop({ default: false }) dialogOpen!: boolean;
   @Prop({ default: "700px" }) maxWidth!: string;
-  @Prop({ default: "create" }) mode!: string;
+  @Prop({ default: "create" }) mode!: "create" | "edit";
   @Prop({ default: 0 }) editChecklistId!: number;
 
   formDataSaved = false;
@@ -141,13 +137,43 @@ export default class ChecklistDialog extends Vue {
     data: null
   };
   formData: ChecklistFormData = new ChecklistFormData(null);
+  reset = false;
 
-  get dialogMode(): string {
-    return this.mode;
+  @Watch("editableChecklist", { immediate: true })
+  onEditMode(checklist: Checklist | undefined) {
+    if (checklist) {
+      const formDataInterface: ChecklistFormDataInterface = {
+        checklistName: checklist.title,
+        checklistColor: checklist.color,
+        checklistDescription: checklist.description,
+        checklistDates: checklist.dates,
+        checklistItems: checklist.items,
+        checklistListItemName: ""
+      };
+
+      this.formData = new ChecklistFormData(formDataInterface);
+    }
+  }
+
+  get isEditMode(): boolean {
+    return this.mode === "edit";
+  }
+
+  get buttonActionText(): string {
+    return this.isEditMode ? "Update" : "Save";
   }
 
   get editableChecklist(): Checklist | undefined {
-    return this.$store.getters.getEditableChecklist;
+    const checklist = this.$store.getters.getEditableChecklist as
+      | Checklist
+      | undefined;
+
+    if (checklist) {
+      return checklist;
+    }
+
+    this.formData = new ChecklistFormData(null);
+    return checklist as undefined;
   }
 
   updateDateTimes(dateTimeObject: ChecklistDateTimeObject) {
@@ -185,9 +211,12 @@ export default class ChecklistDialog extends Vue {
     this.$emit("closeDialog");
   }
 
-  saveChecklist(): void {
+  handleChecklistSubmission(): void {
     const data: ChecklistInterface = {
-      id: this.randomID(),
+      id:
+        this.isEditMode && this.editableChecklist
+          ? this.editableChecklist.id
+          : this.randomID(),
       title: this.formData.checklistName,
       dates: this.formData.checklistDates,
       description: this.formData.checklistDescription || null,
@@ -204,8 +233,13 @@ export default class ChecklistDialog extends Vue {
     }
 
     const newChecklist = new Checklist(data);
-    this.$store.dispatch("saveChecklist", newChecklist);
+    this.isEditMode
+      ? this.$store.dispatch("updateChecklist", newChecklist)
+      : this.$store.dispatch("saveChecklist", newChecklist);
+
+    // close dialog cleanup actions
     this.formData = new ChecklistFormData(null);
+    this.reset = true;
     this.emitClose();
   }
 }

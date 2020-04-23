@@ -12,6 +12,7 @@ export interface ChecklistDateTimeObject {
     startDate: string;
     endTime: string | null;
     endDate: string | null;
+    [key: string]: string | null;
 }
 
 export interface ChecklistItem {
