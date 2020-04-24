@@ -22,7 +22,7 @@ export class ChecklistFormData {
         this.checklistColor = params ? params.checklistColor : "";
         this.checklistDescription = params ? params.checklistDescription : null;
         this.checklistItems = params ? params.checklistItems : [];
-        this.checklistDates = params ? params.checklistDates : { startDate: "", startTime: "", endDate: null, endTime: null};
+        this.checklistDates = params ? params.checklistDates : { startDate: "", startTime: null, endDate: "", endTime: null};
         this.checklistListItemName = params ? params.checklistListItemName : "";
     }
 

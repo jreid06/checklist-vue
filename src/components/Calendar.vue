@@ -1,7 +1,7 @@
 <template>
   <div class="checklist-calendar mb-3" :style="{ height: '600px' }">
     <v-sheet tile color="grey lighten-3" class="d-flex">
-      <v-toolbar flat color="white">
+      <v-toolbar flat color="white" height="57">
         <v-container>
           <v-row>
             <v-col cols="3">

@@ -8,10 +8,10 @@ export interface ChecklistInterface {
 }
 
 export interface ChecklistDateTimeObject {
-    startTime: string;
+    startTime: string | null;
     startDate: string;
     endTime: string | null;
-    endDate: string | null;
+    endDate: string;
     [key: string]: string | null;
 }
 
