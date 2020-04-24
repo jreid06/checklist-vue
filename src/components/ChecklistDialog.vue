@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialogOpen" persistent :max-width="maxWidth">
+  <v-dialog v-model="dialogOpen" scrollable persistent :max-width="maxWidth">
     <v-card>
       <v-card-title>
         <span class="headline text-capitalize">{{ mode }} Checklist</span>
@@ -13,7 +13,6 @@
                 label="Checklist Name"
                 required
               ></v-text-field>
-              <v-divider></v-divider>
             </v-col>
             <v-col cols="12" class="text-left">
               <h6>Checklist Colour</h6>
@@ -48,17 +47,41 @@
                     </v-btn>
                   </div>
                 </div>
-                <div class="d-flex">
-                  <template v-if="formData.checklistItems.length">
-                    <v-chip
-                      close
-                      close-icon="mdi-close-outline"
+                <div class="d-flex flex-wrap">
+                  <template
+                    v-if="!isEditMode && formData.checklistItems.length"
+                  >
+                    <template v-if="formData.checklistItems.length">
+                      <v-chip
+                        close
+                        close-icon="mdi-close-outline"
+                        v-for="item in formData.checklistItems"
+                        :key="item.itemId"
+                        class="mr-2 mb-2"
+                        @click:close="deleteChecklistItem(item.itemId)"
+                      >
+                        {{ item.itemName }}
+                      </v-chip>
+                    </template>
+                  </template>
+                  <template
+                    v-else-if="isEditMode && formData.checklistItems.length"
+                  >
+                    <div
                       v-for="item in formData.checklistItems"
                       :key="item.itemId"
-                      @click:close="deleteChecklistItem(item.itemId)"
+                      :style="{ height: '30px' }"
+                      class="d-flex mr-2 mb-2 border rounded"
                     >
-                      {{ item.itemName }}
-                    </v-chip>
+                      <v-checkbox
+                        v-model="item.itemStatus"
+                        :label="item.itemName"
+                        class="checklist-checkbox mr-2"
+                      ></v-checkbox>
+                      <v-icon @click="deleteChecklistItem(item.itemId)">
+                        mdi-close-outline
+                      </v-icon>
+                    </div>
                   </template>
                   <template v-else>
                     <v-alert
@@ -244,4 +267,11 @@ export default class ChecklistDialog extends Vue {
   }
 }
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.checklist-checkbox {
+  .v-input__control {
+    position: relative;
+    top: -20px;
+  }
+}
+</style>

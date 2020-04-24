@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex align-items-center" :style="{ height: '100vh' }">
     <div class="app-home p-2 flex-grow-1">
-      <h1 class="display-3">Checklist Calendar App</h1>
-      <h4>Download &amp; add to your home screen</h4>
+      <h1 class="display-2">Checklist Calendar App</h1>
+      <h5>Download &amp; add to your home screen</h5>
       <div class="d-flex justify-content-center mt-5">
         <router-link :to="{ name: 'Calendar' }" class="btn btn-light mr-4">
           Calendar

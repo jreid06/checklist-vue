@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar-view">
+  <div class="calendar-view pt-5">
     <b-container>
       <b-row>
         <b-col>
