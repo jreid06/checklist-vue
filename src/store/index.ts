@@ -41,7 +41,7 @@ export default new Vuex.Store<any>({
     updateChecklist(state: AppState, checklist: Checklist) {
       state.checklists.map((c) => {
         if (c.id === checklist.id) {
-          c = checklist;
+          Object.assign(c, checklist);
         }
       })
     }, 
