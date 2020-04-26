@@ -5,7 +5,8 @@
       :height="30"
       :lights-out="false"
       :window="false"
-      class="border-bottom position-absolute w-100"
+      class="border-bottom position-fixed w-100"
+      :style="{ zIndex: '100' }"
     >
       <router-link :to="{ name: 'Home' }">
         <v-icon>mdi-home-variant-outline</v-icon>

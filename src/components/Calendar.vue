@@ -1,72 +1,77 @@
 <template>
-  <div class="checklist-calendar mb-3" :style="{ height: '600px' }">
-    <v-sheet tile color="grey lighten-3" class="d-flex">
-      <v-toolbar flat color="white" height="57">
-        <v-container>
-          <v-row>
-            <v-col cols="3">
-              <v-btn
-                outlined
-                class="mr-4"
-                color="grey darken-2"
-                @click="setToday"
-              >
-                Today
-              </v-btn>
-            </v-col>
-            <v-col cols="6">
-              <div class="d-flex">
-                <v-btn
-                  fab
-                  text
-                  small
-                  color="grey darken-2"
-                  @click="$refs.calendar.prev()"
-                >
-                  <v-icon small>mdi-chevron-left</v-icon>
-                </v-btn>
-                <v-toolbar-title class="flex-grow-1">
-                  {{ title }}
-                </v-toolbar-title>
-                <v-btn
-                  fab
-                  text
-                  small
-                  color="grey darken-2"
-                  @click="$refs.calendar.next()"
-                >
-                  <v-icon small>mdi-chevron-right</v-icon>
-                </v-btn>
-              </div>
-            </v-col>
-            <v-col cols="3">
-              <v-menu bottom right>
-                <template v-slot:activator="{ on }">
-                  <v-btn outlined color="grey darken-2" v-on="on">
-                    <span>{{ typeToLabel[type] }}</span>
-                    <v-icon right>mdi-menu-down</v-icon>
+  <div class="checklist-calendar mb-3">
+    <v-container>
+      <v-row>
+        <v-col cols="12">
+          <!-- <v-sheet tile color="grey lighten-3" class="d-flex"> -->
+          <v-toolbar flat color="white">
+            <v-container>
+              <v-row>
+                <v-col cols="6" md="2">
+                  <v-btn
+                    outlined
+                    class="mr-4"
+                    color="grey darken-2"
+                    @click="setToday"
+                  >
+                    Today
                   </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item @click="type = 'day'">
-                    <v-list-item-title>Day</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="type = 'week'">
-                    <v-list-item-title>Week</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="type = 'month'">
-                    <v-list-item-title>Month</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="type = '4day'">
-                    <v-list-item-title>4 days</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-col>
-          </v-row>
-        </v-container>
+                </v-col>
 
-        <!-- <v-spacer></v-spacer>
+                <v-col cols="6" md="2">
+                  <v-menu bottom right>
+                    <template v-slot:activator="{ on }">
+                      <v-btn outlined color="grey darken-2" v-on="on">
+                        <span>{{ typeToLabel[type] }}</span>
+                        <v-icon right>mdi-menu-down</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item @click="type = 'day'">
+                        <v-list-item-title>Day</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="type = 'week'">
+                        <v-list-item-title>Week</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="type = 'month'">
+                        <v-list-item-title>Month</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="type = '4day'">
+                        <v-list-item-title>4 days</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-col>
+
+                <v-col cols="12" md="8">
+                  <div class="d-flex">
+                    <v-btn
+                      fab
+                      text
+                      small
+                      color="grey darken-2"
+                      @click="$refs.calendar.prev()"
+                    >
+                      <v-icon small>mdi-chevron-left</v-icon>
+                    </v-btn>
+                    <v-toolbar-title class="flex-grow-1">
+                      {{ title }}
+                    </v-toolbar-title>
+                    <v-btn
+                      fab
+                      text
+                      small
+                      color="grey darken-2"
+                      @click="$refs.calendar.next()"
+                    >
+                      <v-icon small>mdi-chevron-right</v-icon>
+                    </v-btn>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-container>
+
+            <!-- <v-spacer></v-spacer>
         <v-select
           v-model="weekday"
           :items="weekdays"
@@ -76,21 +81,26 @@
           label="weekdays"
           class="ma-2"
         ></v-select> -->
-      </v-toolbar>
-    </v-sheet>
-    <v-calendar
-      class="checklist-calendar-component"
-      ref="calendar"
-      v-model="value"
-      :weekdays="weekday"
-      :type="type"
-      :events="allEvents"
-      :event-overlap-mode="mode"
-      :event-overlap-threshold="30"
-      :event-color="getEventColor"
-      @change="handleChange"
-      @click:event="handleEventClicked"
-    ></v-calendar>
+          </v-toolbar>
+          <!-- </v-sheet> -->
+        </v-col>
+        <v-col cols="12">
+          <v-calendar
+            class="checklist-calendar-component"
+            ref="calendar"
+            v-model="value"
+            :weekdays="weekday"
+            :type="type"
+            :events="allEvents"
+            :event-overlap-mode="mode"
+            :event-overlap-threshold="30"
+            :event-color="getEventColor"
+            @change="handleChange"
+            @click:event="handleEventClicked"
+          ></v-calendar>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 <script lang="ts">
@@ -210,3 +220,19 @@ export default class ChecklistCalendar extends Vue {
   }
 }
 </script>
+<style lang="scss">
+.checklist-calendar {
+  height: 600px;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.v-toolbar {
+  height: initial !important;
+  &__content {
+    height: initial !important;
+  }
+}
+</style>

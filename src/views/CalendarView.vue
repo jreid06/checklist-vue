@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar-view pt-5">
+  <div class="calendar-view pt-5 mb-4">
     <b-container>
       <b-row>
         <b-col>
@@ -20,74 +20,50 @@
               <h4>Today's Checklists</h4>
               <v-divider />
               <div :style="{ maxHeight: '300px', overflow: 'auto' }">
-                <v-card
-                  class="mx-auto mb-4"
-                  max-width="400"
-                  tile
-                  v-for="checklist in todaysChecklists"
-                  :key="checklist.id"
-                  @click="onEditChecklistItem(checklist)"
-                >
-                  <v-list-item class="grow">
-                    <v-list-item-avatar :color="checklist.color">
-                    </v-list-item-avatar>
-
-                    <v-list-item-content>
-                      <v-list-item-title>{{
-                        checklist.title
-                      }}</v-list-item-title>
-                    </v-list-item-content>
-
-                    <v-row align="center" justify="end" class="pr-2">
-                      <v-icon class="mr-1">mdi-checkbox-marked-circle</v-icon>
-                      <span class="subheading mr-2">{{
-                        checklist.completeItems().length
-                      }}</span>
-                      <span class="mr-1">·</span>
-                      <v-icon class="mr-1">mdi-close-outline</v-icon>
-                      <span class="subheading">{{
-                        checklist.inCompleteItems().length
-                      }}</span>
-                    </v-row>
-                  </v-list-item>
-                </v-card>
+                <template v-if="todaysChecklists.length">
+                  <ChecklistCard
+                    v-for="checklist in todaysChecklists"
+                    :checklist="checklist"
+                    :key="checklist.id"
+                    @editChecklist="onEditChecklistItem"
+                  />
+                </template>
+                <template v-else>
+                  <v-alert
+                    class=""
+                    type="info"
+                    outlined
+                    width="100%"
+                    elevation="2"
+                  >
+                    No Checklists for today
+                  </v-alert>
+                </template>
               </div>
             </b-col>
             <b-col cols="12" md="6" lg="12">
               <h4>All Checklists</h4>
               <v-divider />
               <div :style="{ maxHeight: '300px', overflow: 'auto' }">
-                <v-card
-                  class="mx-auto mb-4"
-                  max-width="400"
-                  tile
-                  v-for="checklist in checklists"
-                  :key="checklist.id"
-                  @click="onEditChecklistItem(checklist)"
-                >
-                  <v-list-item class="grow">
-                    <v-list-item-avatar :color="checklist.color">
-                    </v-list-item-avatar>
-
-                    <v-list-item-content>
-                      <v-list-item-title>{{
-                        checklist.title
-                      }}</v-list-item-title>
-                    </v-list-item-content>
-
-                    <v-row align="center" justify="end" class="pr-2">
-                      <v-icon class="mr-1">mdi-checkbox-marked-circle</v-icon>
-                      <span class="subheading mr-2">{{
-                        checklist.completeItems().length
-                      }}</span>
-                      <span class="mr-1">·</span>
-                      <v-icon class="mr-1">mdi-close-outline</v-icon>
-                      <span class="subheading">{{
-                        checklist.inCompleteItems().length
-                      }}</span>
-                    </v-row>
-                  </v-list-item>
-                </v-card>
+                <template v-if="checklists.length">
+                  <ChecklistCard
+                    v-for="checklist in checklists"
+                    :checklist="checklist"
+                    :key="checklist.id"
+                    @editChecklist="onEditChecklistItem"
+                  />
+                </template>
+                <template v-else>
+                  <v-alert
+                    class=""
+                    type="info"
+                    outlined
+                    width="100%"
+                    elevation="2"
+                  >
+                    No Checklists to complete. Get adding!!
+                  </v-alert>
+                </template>
               </div>
             </b-col>
           </b-row>
@@ -105,12 +81,14 @@
 import { Component, Vue } from "vue-property-decorator";
 import ChecklistCalendar from "@/components/Calendar.vue";
 import ChecklistDialog from "@/components/ChecklistDialog.vue";
-import { Checklist } from "../classes/Checklist";
+import ChecklistCard from "@/components/ChecklistCard.vue";
+import { Checklist } from "@/classes/Checklist";
 
 @Component({
   components: {
     ChecklistCalendar,
-    ChecklistDialog
+    ChecklistDialog,
+    ChecklistCard
   }
 })
 export default class CalendarView extends Vue {

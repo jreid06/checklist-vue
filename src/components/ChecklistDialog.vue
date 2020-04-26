@@ -87,9 +87,8 @@
                     <v-alert
                       class=""
                       type="info"
-                      border="top"
+                      outlined
                       width="100%"
-                      colored-border
                       elevation="2"
                     >
                       No list items created
