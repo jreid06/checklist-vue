@@ -125,6 +125,14 @@
         <v-btn color="blue darken-1" text @click="handleChecklistSubmission">
           {{ buttonActionText }}
         </v-btn>
+        <v-btn
+          v-if="isEditMode"
+          color="red darken-1"
+          text
+          @click="deleteChecklist"
+        >
+          Delete Checklist
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -260,10 +268,22 @@ export default class ChecklistDialog extends Vue {
       ? this.$store.dispatch("updateChecklist", newChecklist)
       : this.$store.dispatch("saveChecklist", newChecklist);
 
+    this.closeDialogActions();
+  }
+
+  closeDialogActions(): void {
     // close dialog cleanup actions
     this.formData = new ChecklistFormData(null);
     this.reset = true;
     this.emitClose();
+  }
+
+  deleteChecklist(): void {
+    this.editableChecklist
+      ? this.$store.dispatch("deleteChecklist", this.editableChecklist.id)
+      : null;
+
+    this.closeDialogActions();
   }
 }
 </script>

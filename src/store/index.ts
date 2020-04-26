@@ -44,7 +44,11 @@ export default new Vuex.Store<any>({
           Object.assign(c, checklist);
         }
       })
-    }, 
+    },
+    deleteChecklist(state: AppState, checklistId: number) {
+      const itemLocation = state.checklists.findIndex(x => x.id === checklistId);
+      state.checklists.splice(itemLocation, 1);
+    },  
     toggleLoadState(state: AppState) {
       state.dataLoaded = !state.dataLoaded;
     },
@@ -69,6 +73,10 @@ export default new Vuex.Store<any>({
     },
     updateChecklist({commit, dispatch}, checklist: Checklist) {
       commit('updateChecklist', checklist);
+      dispatch('updateChecklistsInStorage');
+    },
+    deleteChecklist({commit, dispatch}, checklistId: number) {
+      commit('deleteChecklist', checklistId);
       dispatch('updateChecklistsInStorage');
     }
   },
