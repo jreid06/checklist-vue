@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.d984094506fe81aade6573743a6f12ef.js"
+  "/precache-manifest.9fdc5eccb90e7ff6ad36d809b0f83924.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "checklist-calendar-app"});
