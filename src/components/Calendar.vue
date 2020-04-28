@@ -70,17 +70,6 @@
                 </v-col>
               </v-row>
             </v-container>
-
-            <!-- <v-spacer></v-spacer>
-        <v-select
-          v-model="weekday"
-          :items="weekdays"
-          dense
-          outlined
-          hide-details
-          label="weekdays"
-          class="ma-2"
-        ></v-select> -->
           </v-toolbar>
           <!-- </v-sheet> -->
         </v-col>
@@ -205,7 +194,7 @@ export default class ChecklistCalendar extends Vue {
       items: event.items
     });
 
-    this.$emit("editChecklistItem", checklist);
+    this.$emit("editChecklistItem", checklist.id);
   }
 
   getEventColor(event: ChecklistCalendarEvent) {

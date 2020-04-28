@@ -1,5 +1,9 @@
 <template>
-  <div class="d-flex align-items-center" :style="{ height: '100vh' }">
+  <div
+    class="d-flex align-items-center position-relative"
+    :style="{ height: '100vh' }"
+  >
+    <!-- <div class="position-absolute bg-home"></div> -->
     <div class="app-home p-2 flex-grow-1 mt-5 pt-5">
       <h1 class="display-2">Checklist Calendar App</h1>
       <h5>Download &amp; add to your home screen</h5>
@@ -28,6 +32,15 @@ export default class HomeView extends Vue {}
 $black: #2c3e50;
 $white: #fff;
 $white-grey: #f2f2f2;
+
+.bg-home {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  z-index: 1;
+  background: url(https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg);
+}
 
 .app-home {
   h1 {

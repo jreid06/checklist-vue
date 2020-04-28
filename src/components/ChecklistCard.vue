@@ -4,7 +4,7 @@
     max-width="400"
     tile
     :color="checklistComplete ? '#5f9b47' : ''"
-    @click="$emit('editChecklist', checklist)"
+    @click="$emit('editChecklist', checklist.id)"
   >
     <v-list-item class="grow">
       <v-list-item-avatar :color="checklist.color"> </v-list-item-avatar>

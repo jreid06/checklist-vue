@@ -3,9 +3,9 @@
     <b-container>
       <b-row>
         <b-col>
-          <b-button variant="light" @click="toggleChecklistDialog">
+          <v-btn type="info" outlined="true" @click="toggleChecklistDialog">
             Create checklist item
-          </b-button>
+          </v-btn>
         </b-col>
       </b-row>
       <b-row>
@@ -154,9 +154,15 @@ export default class CalendarView extends Vue {
     }
   }
 
-  onEditChecklistItem(checklistItem: Checklist) {
-    this.$store.commit("setEditableChecklist", checklistItem);
-    this.toggleChecklistDialog();
+  onEditChecklistItem(checklistId: number) {
+    const checklistItem = this.checklists.find(c => c.id === checklistId);
+    if (checklistItem) {
+      this.$store.commit(
+        "setEditableChecklist",
+        JSON.parse(JSON.stringify(checklistItem))
+      );
+      this.toggleChecklistDialog();
+    }
   }
 
   addDays(date: Date, days: number) {
