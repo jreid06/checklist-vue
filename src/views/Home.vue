@@ -8,23 +8,33 @@
       <h1 class="display-2">Checklist Calendar App</h1>
       <h5>Download &amp; add to your home screen</h5>
       <div class="d-flex justify-content-center">
-        <router-link :to="{ name: 'Calendar' }" class="btn btn-light mr-4">
-          Calendar
-        </router-link>
+        <v-btn :dark="isDarkMode">
+          <router-link :to="{ name: 'Calendar' }">
+            Calendar
+          </router-link>
+        </v-btn>
       </div>
       <div class="app-home--image m-auto">
-        <img alt="Vue logo" class="img-fluid" src="./../assets/3327590.jpg" />
+        <img
+          alt="Vue logo"
+          class="img-fluid"
+          src="./../assets/3327590-edit.png"
+        />
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // @ is an alias to /src
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class HomeView extends Vue {}
+export default class HomeView extends Vue {
+  get isDarkMode(): boolean {
+    return this.$store.getters.isDarkMode;
+  }
+}
 </script>
 <style lang="scss" scoped>
 @import "@/assets/scss/Media.scss";

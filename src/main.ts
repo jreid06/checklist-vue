@@ -18,6 +18,7 @@ router.beforeEach((to, from, next) => {
   if (!store.getters.isDataLoaded) {
     console.log('init app');
     store.dispatch('loadChecklists');
+    store.dispatch('setAppMode');
   }
 
   next();

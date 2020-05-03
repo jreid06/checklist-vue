@@ -3,15 +3,18 @@
     <v-container>
       <v-row>
         <v-col cols="12">
-          <!-- <v-sheet tile color="grey lighten-3" class="d-flex"> -->
-          <v-toolbar flat color="white">
+          <v-toolbar
+            flat
+            :color="!isDarkMode ? 'white' : ''"
+            :dark="isDarkMode"
+          >
             <v-container>
               <v-row>
                 <v-col cols="6" md="2">
                   <v-btn
-                    outlined
                     class="mr-4"
-                    color="grey darken-2"
+                    :dark="isDarkMode"
+                    :outlined="!isDarkMode"
                     @click="setToday"
                   >
                     Today
@@ -19,14 +22,18 @@
                 </v-col>
 
                 <v-col cols="6" md="2">
-                  <v-menu bottom right>
+                  <v-menu bottom right :dark="isDarkMode">
                     <template v-slot:activator="{ on }">
-                      <v-btn outlined color="grey darken-2" v-on="on">
+                      <v-btn
+                        v-on="on"
+                        :dark="isDarkMode"
+                        :outlined="!isDarkMode"
+                      >
                         <span>{{ typeToLabel[type] }}</span>
                         <v-icon right>mdi-menu-down</v-icon>
                       </v-btn>
                     </template>
-                    <v-list>
+                    <v-list :dark="isDarkMode">
                       <v-list-item @click="type = 'day'">
                         <v-list-item-title>Day</v-list-item-title>
                       </v-list-item>
@@ -71,12 +78,12 @@
               </v-row>
             </v-container>
           </v-toolbar>
-          <!-- </v-sheet> -->
         </v-col>
         <v-col cols="12">
           <v-calendar
             class="checklist-calendar-component"
             ref="calendar"
+            :dark="isDarkMode"
             v-model="value"
             :weekdays="weekday"
             :type="type"
@@ -136,6 +143,10 @@ export default class ChecklistCalendar extends Vue {
     { text: "Sat & Sun", value: [6, 0] }
   ];
   value = "";
+
+  get isDarkMode(): boolean {
+    return this.$store.getters.isDarkMode;
+  }
 
   get title() {
     return `${new Date(this.currentdate.month || Date.now()).toLocaleString(

@@ -1,9 +1,14 @@
 <template>
-  <div class="calendar-view pt-5 mb-4">
-    <b-container>
+  <div class="calendar-view pt-5 mb-5">
+    <b-container class="mt-5">
       <b-row>
         <b-col>
-          <v-btn type="info" outlined="true" @click="toggleChecklistDialog">
+          <v-btn
+            type="info"
+            :outlined="isDarkMode ? false : true"
+            :dark="isDarkMode"
+            @click="toggleChecklistDialog"
+          >
             Create checklist item
           </v-btn>
         </b-col>
@@ -93,6 +98,10 @@ import { Checklist } from "@/classes/Checklist";
 })
 export default class CalendarView extends Vue {
   isDialogOpen = false;
+
+  get isDarkMode(): boolean {
+    return this.$store.getters.isDarkMode;
+  }
 
   get checklists(): Checklist[] {
     return this.$store.getters.getChecklists;

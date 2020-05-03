@@ -9,7 +9,8 @@ export default new Vuex.Store<any>({
   state: {
     dataLoaded: false,
     checklists: [],
-    selectedChecklist: null
+    selectedChecklist: null,
+    currentMode: 'light'
   },
   getters: {
     checklists: (state: AppState) => {
@@ -27,6 +28,10 @@ export default new Vuex.Store<any>({
     getChecklist: (state: AppState, id: number) => {
       return state.checklists.find(x => x.id === id);
     },
+    getAppMode: (state: AppState) => {
+      return state.currentMode;
+    },
+    isDarkMode: (state: AppState) => state.currentMode === 'dark'
   },
   mutations: {
     addChecklist(state: AppState, checklist: Checklist) {
@@ -44,6 +49,9 @@ export default new Vuex.Store<any>({
           Object.assign(c, checklist);
         }
       })
+    },
+    setAppMode(state: AppState, mode: "light" | "dark") {
+      state.currentMode = mode;
     },
     deleteChecklist(state: AppState, checklistId: number) {
       const itemLocation = state.checklists.findIndex(x => x.id === checklistId);
@@ -78,7 +86,17 @@ export default new Vuex.Store<any>({
     deleteChecklist({commit, dispatch}, checklistId: number) {
       commit('deleteChecklist', checklistId);
       dispatch('updateChecklistsInStorage');
-    }
+    },
+    setAppMode({commit}) {
+      const savedAppMode = LocalStorageService.getData<"light"|"dark">("appMode");
+      if (savedAppMode) {
+        commit('setAppMode', savedAppMode);
+      }
+    },
+    updateAppMode({ commit }, mode: "light" | "dark") {
+      commit('setAppMode', mode);
+      LocalStorageService.setData("appMode", mode);
+    },
   },
   modules: {}
 } as VueXCustom );
@@ -91,4 +109,5 @@ interface AppState {
     checklists: Checklist[],
     dataLoaded: boolean;
     selectedChecklist: Checklist | null;
+    currentMode: "light" | "dark";
   }
