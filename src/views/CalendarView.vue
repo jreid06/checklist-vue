@@ -78,6 +78,7 @@
     <ChecklistDialog
       :dialogOpen="isDialogOpen"
       :mode="dialogMode"
+      :darkMode="isDarkMode"
       @closeDialog="toggleChecklistDialog"
     />
   </div>

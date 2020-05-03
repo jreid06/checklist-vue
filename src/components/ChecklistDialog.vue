@@ -1,5 +1,11 @@
 <template>
-  <v-dialog v-model="dialogOpen" scrollable persistent :max-width="maxWidth">
+  <v-dialog
+    v-model="dialogOpen"
+    scrollable
+    persistent
+    :max-width="maxWidth"
+    :dark="darkMode"
+  >
     <v-card>
       <v-card-title>
         <span class="headline text-capitalize">{{ mode }} Checklist</span>
@@ -157,6 +163,7 @@ import {
 })
 export default class ChecklistDialog extends Vue {
   @Prop({ default: false }) dialogOpen!: boolean;
+  @Prop({ default: false }) darkMode!: boolean;
   @Prop({ default: "700px" }) maxWidth!: string;
   @Prop({ default: "create" }) mode!: "create" | "edit";
   @Prop({ default: 0 }) editChecklistId!: number;
