@@ -83,6 +83,7 @@
           <v-calendar
             class="checklist-calendar-component"
             ref="calendar"
+            :color="isDarkMode ? '#000' : '#fff'"
             :dark="isDarkMode"
             v-model="value"
             :weekdays="weekday"
