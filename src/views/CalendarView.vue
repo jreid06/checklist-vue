@@ -14,12 +14,12 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col cols="12" lg="8">
+        <b-col order="2" order-md="1" cols="12" lg="8">
           <div class="m-auto">
             <ChecklistCalendar @editChecklistItem="onEditChecklistItem" />
           </div>
         </b-col>
-        <b-col cols="12" lg="4" class="mt-5 mt-lg-0">
+        <b-col order="1" order-md="2" cols="12" lg="4" class="mt-5 mt-lg-0">
           <b-row>
             <b-col cols="12" md="6" lg="12">
               <h4>Today's Checklists</h4>
