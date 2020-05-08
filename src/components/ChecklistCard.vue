@@ -3,7 +3,8 @@
     class="mx-auto mb-4"
     max-width="400"
     tile
-    :color="checklistComplete ? '#5f9b47' : ''"
+    :dark="isDarkMode"
+    :color="checklistComplete ? '#5f9b47' : 'inherit'"
     @click="$emit('editChecklist', checklist.id)"
   >
     <v-list-item class="grow">
@@ -39,6 +40,10 @@ export default class ChecklistCard extends Vue {
       this.checklist.items.filter(x => x.itemStatus).length ===
         this.checklist.getItems().length
     );
+  }
+
+  get isDarkMode(): boolean {
+    return this.$store.getters.isDarkMode;
   }
 }
 </script>
