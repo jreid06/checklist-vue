@@ -30,6 +30,15 @@
       <span class="ml-2">{{ time }}</span>
     </v-system-bar>
     <router-view></router-view>
+    <v-footer :padless="true" fixed="true">
+      <v-card flat tile width="100%" class="lighten-1 text-center" color="#000">
+        <v-card-text class="white--text">
+          Made with <v-icon color="red">mdi-heart</v-icon>
+          {{ new Date().getFullYear() }} by
+          <strong><a href="https://www.jbreid.co.uk">JB.Reid</a></strong>
+        </v-card-text>
+      </v-card>
+    </v-footer>
   </v-app>
 </template>
 

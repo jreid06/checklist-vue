@@ -1,6 +1,6 @@
 <template>
   <div class="calendar-view pt-5 mb-5">
-    <b-container class="mt-5">
+    <b-container class="mt-5 mb-5">
       <b-row>
         <b-col>
           <v-btn
