@@ -11,19 +11,19 @@
           <DatePicker
             pickerLabel="Start Date"
             :value="picker.startDate"
-            @dateUpdated="handleToolbarUpdates"
+            @dateUpdated="handleDateUpdates"
             keyToUpdate="startDate"
           />
           <DateTimeToolbar
             :keyName="'startDate'"
-            @updateDate="handleToolbarUpdates"
+            @updateDate="handleDateUpdates"
           />
         </div>
         <!--  -->
         <div class="flex-grow-1 ml-1 mt-2">
           <TimePicker
             pickerLabel="Start Time"
-            @dateUpdated="handleToolbarUpdates"
+            @dateUpdated="handleDateUpdates"
             keyToUpdate="startTime"
           />
         </div>
@@ -41,19 +41,19 @@
           <DatePicker
             pickerLabel="End Date"
             :value="picker.endDate"
-            @dateUpdated="handleToolbarUpdates"
+            @dateUpdated="handleDateUpdates"
             keyToUpdate="endDate"
           />
           <DateTimeToolbar
             :keyName="'endDate'"
-            @updateDate="handleToolbarUpdates"
+            @updateDate="handleDateUpdates"
           />
         </div>
         <!--  -->
         <div class="flex-grow-1 ml-1 mt-2">
           <TimePicker
             pickerLabel="End Time"
-            @dateUpdated="handleToolbarUpdates"
+            @dateUpdated="handleDateUpdates"
             keyToUpdate="endTime"
           />
         </div>
@@ -100,7 +100,7 @@ export default class DateTimePicker extends Vue {
     }
   }
 
-  handleToolbarUpdates({
+  handleDateUpdates({
     key,
     data
   }: {
