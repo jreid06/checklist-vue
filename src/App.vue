@@ -31,8 +31,14 @@
     </v-system-bar>
     <router-view></router-view>
     <v-footer :padless="true" fixed="true">
-      <v-card flat tile width="100%" class="lighten-1 text-center" color="#000">
-        <v-card-text class="white--text">
+      <v-card
+        flat
+        tile
+        width="100%"
+        class="text-center"
+        :color="isDarkMode ? '#000' : '#fff'"
+      >
+        <v-card-text :class="{ 'white--text': isDarkMode }">
           Made with <v-icon color="red">mdi-heart</v-icon>
           {{ new Date().getFullYear() }} by
           <strong><a href="https://www.jbreid.co.uk">JB.Reid</a></strong>
