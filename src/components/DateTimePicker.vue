@@ -8,37 +8,12 @@
         width="100%"
       >
         <div class="flex-grow-1 mr-1 w-100">
-          <v-menu
-            ref="startDate"
-            :dark="isDarkMode"
-            v-model="startDate"
-            :close-on-content-click="false"
-            :return-value.sync="picker.startDate"
-            transition="scale-transition"
-            offset-y
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="picker.startDate"
-                label="Start Date"
-                readonly
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="picker.startDate" no-title scrollable>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="startDate = false"
-                >Cancel</v-btn
-              >
-              <v-btn
-                text
-                color="primary"
-                @click="$refs.startDate.save(picker.startDate)"
-                >OK</v-btn
-              >
-            </v-date-picker>
-          </v-menu>
+          <DatePicker
+            pickerLabel="Start Date"
+            :value="picker.startDate"
+            @dateUpdated="handleToolbarUpdates"
+            keyToUpdate="startDate"
+          />
           <DateTimeToolbar
             :keyName="'startDate'"
             @updateDate="handleToolbarUpdates"
@@ -46,33 +21,11 @@
         </div>
         <!--  -->
         <div class="flex-grow-1 ml-1 mt-2">
-          <v-menu
-            ref="startTime"
-            :dark="isDarkMode"
-            v-model="startTime"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            :return-value.sync="picker.startTime"
-            transition="scale-transition"
-            offset-y
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="picker.startTime"
-                label="Start Time"
-                readonly
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-time-picker
-              v-if="startTime"
-              landscape
-              ampm-in-title
-              v-model="picker.startTime"
-              full-width
-              @click:minute="$refs.startTime.save(picker.startTime)"
-            ></v-time-picker>
-          </v-menu>
+          <TimePicker
+            pickerLabel="Start Time"
+            @dateUpdated="handleToolbarUpdates"
+            keyToUpdate="startTime"
+          />
         </div>
       </v-sheet>
     </div>
@@ -85,37 +38,12 @@
         width="100%"
       >
         <div class="flex-grow-1 mr-1 w-100">
-          <v-menu
-            :dark="isDarkMode"
-            ref="endDate"
-            v-model="endDate"
-            :close-on-content-click="false"
-            :return-value.sync="picker.endDate"
-            transition="scale-transition"
-            offset-y
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="picker.endDate"
-                label="End Date"
-                readonly
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="picker.endDate" no-title scrollable>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="endDate = false"
-                >Cancel</v-btn
-              >
-              <v-btn
-                text
-                color="primary"
-                @click="$refs.endDate.save(picker.endDate)"
-                >OK</v-btn
-              >
-            </v-date-picker>
-          </v-menu>
+          <DatePicker
+            pickerLabel="End Date"
+            :value="picker.endDate"
+            @dateUpdated="handleToolbarUpdates"
+            keyToUpdate="endDate"
+          />
           <DateTimeToolbar
             :keyName="'endDate'"
             @updateDate="handleToolbarUpdates"
@@ -123,34 +51,11 @@
         </div>
         <!--  -->
         <div class="flex-grow-1 ml-1 mt-2">
-          <v-menu
-            ref="endTime"
-            v-model="endTime"
-            :dark="isDarkMode"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            :return-value.sync="picker.endTime"
-            transition="scale-transition"
-            offset-y
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="picker.endTime"
-                label="End Time"
-                readonly
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-time-picker
-              :dark="isDarkMode"
-              v-if="endTime"
-              landscape
-              ampm-in-title
-              v-model="picker.endTime"
-              full-width
-              @click:minute="$refs.endTime.save(picker.endTime)"
-            ></v-time-picker>
-          </v-menu>
+          <TimePicker
+            pickerLabel="End Time"
+            @dateUpdated="handleToolbarUpdates"
+            keyToUpdate="endTime"
+          />
         </div>
       </v-sheet>
     </div>
@@ -160,8 +65,10 @@
 import { Component, Vue, Watch, Prop } from "vue-property-decorator";
 import { ChecklistDateTimeObject } from "@/classes/Checklist";
 import DateTimeToolbar from "@/components/DateTimeToolbar.vue";
+import TimePicker from "@/components/TimePicker.vue";
+import DatePicker from "@/components/DatePicker.vue";
 
-@Component({ components: { DateTimeToolbar } })
+@Component({ components: { DateTimeToolbar, TimePicker, DatePicker } })
 export default class DateTimePicker extends Vue {
   @Prop({ required: true }) dateObject!: ChecklistDateTimeObject;
   @Prop({ default: false }) resetPicker!: boolean;
@@ -173,18 +80,12 @@ export default class DateTimePicker extends Vue {
   };
 
   elevation = 5;
-
   startDate = false;
   startTime = false;
 
   endDate = false;
   endTime = false;
   counter = 0;
-
-  @Watch("picker", { deep: true })
-  onDateTimeChange() {
-    this.$emit("dateTimeChange", this.picker);
-  }
 
   @Watch("dateObject", { deep: true, immediate: true })
   onDateTimeUpdate(dateObject: ChecklistDateTimeObject) {
