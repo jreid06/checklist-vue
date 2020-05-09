@@ -7,7 +7,7 @@
             type="info"
             :outlined="isDarkMode ? false : true"
             :dark="isDarkMode"
-            @click="toggleChecklistDialog"
+            @click="toggleDialog('checklist')"
           >
             Create checklist item
           </v-btn>
@@ -21,7 +21,7 @@
         </b-col>
         <b-col order="1" order-md="2" cols="12" lg="4" class="mt-5 mt-lg-0">
           <b-row>
-            <b-col cols="12" md="6" lg="12">
+            <b-col cols="12" md="4" lg="12">
               <h4>Today's Checklists</h4>
               <v-divider />
               <div :style="{ maxHeight: '300px', overflow: 'auto' }">
@@ -46,7 +46,7 @@
                 </template>
               </div>
             </b-col>
-            <b-col cols="12" md="6" lg="12">
+            <b-col cols="12" md="4" lg="12">
               <h4>All Checklists</h4>
               <v-divider />
               <div :style="{ maxHeight: '300px', overflow: 'auto' }">
@@ -101,10 +101,15 @@
       </b-row>
     </b-container>
     <ChecklistDialog
-      :dialogOpen="isDialogOpen"
+      :dialogOpen="isChecklistDialogOpen"
       :mode="dialogMode"
       :darkMode="isDarkMode"
-      @closeDialog="toggleChecklistDialog"
+      @closeDialog="toggleDialog('checklist')"
+    />
+    <ChecklistItemDialog
+      :dialogOpen="isChecklistItemDialogOpen"
+      :darkMode="isDarkMode"
+      @closeDialog="toggleDialog('checklistItem')"
     />
   </div>
 </template>
@@ -113,17 +118,20 @@ import { Component, Vue } from "vue-property-decorator";
 import ChecklistCalendar from "@/components/Calendar.vue";
 import ChecklistDialog from "@/components/ChecklistDialog.vue";
 import ChecklistCard from "@/components/ChecklistCard.vue";
+import ChecklistItemDialog from "@/components/ChecklistItemsDialog.vue";
 import { Checklist } from "@/classes/Checklist";
 
 @Component({
   components: {
     ChecklistCalendar,
     ChecklistDialog,
-    ChecklistCard
+    ChecklistCard,
+    ChecklistItemDialog
   }
 })
 export default class CalendarView extends Vue {
-  isDialogOpen = false;
+  isChecklistDialogOpen = false;
+  isChecklistItemDialogOpen = false;
 
   get isDarkMode(): boolean {
     return this.$store.getters.isDarkMode;
@@ -189,22 +197,42 @@ export default class CalendarView extends Vue {
     return !!this.$store.getters.getEditableChecklist;
   }
 
-  toggleChecklistDialog(): void {
-    this.isDialogOpen = !this.isDialogOpen;
+  handleChecklistDialog(): void {
+    this.isChecklistDialogOpen = !this.isChecklistDialogOpen;
 
-    if (!this.isDialogOpen) {
+    if (!this.isChecklistDialogOpen && this.editableChecklist) {
       this.$store.commit("removeEditableChecklist");
     }
   }
 
-  onEditChecklistItem(checklistId: number) {
+  handleChecklistItemDialog(): void {
+    this.isChecklistItemDialogOpen = !this.isChecklistItemDialogOpen;
+
+    if (!this.isChecklistItemDialogOpen && this.editableChecklist) {
+      this.$store.commit("removeEditableChecklist");
+    }
+  }
+
+  toggleDialog(dialogName: string): void {
+    if (dialogName === "checklist") this.handleChecklistDialog();
+
+    if (dialogName === "checklistItem") this.handleChecklistItemDialog();
+  }
+
+  onEditChecklistItem({
+    id: checklistId,
+    dialogName
+  }: {
+    id: number;
+    dialogName: string;
+  }) {
     const checklistItem = this.checklists.find(c => c.id === checklistId);
     if (checklistItem) {
       this.$store.commit(
         "setEditableChecklist",
         JSON.parse(JSON.stringify(checklistItem))
       );
-      this.toggleChecklistDialog();
+      this.toggleDialog(dialogName);
     }
   }
 

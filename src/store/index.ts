@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex, { StoreOptions } from "vuex";
-import { Checklist, ChecklistInterface } from '../classes/Checklist';
+import { Checklist, ChecklistInterface, ChecklistItem } from '../classes/Checklist';
 import { LocalStorageService, checkListsKey } from '../services/LocalStorageService';
 
 Vue.use(Vuex);
@@ -42,12 +42,28 @@ export default new Vuex.Store<any>({
     }, 
     removeEditableChecklist(state: AppState) {
       state.selectedChecklist = null;
-    }, 
+    },
+    deleteChecklistItem(state: AppState, {checklistId, itemId}: {checklistId: number, itemId: number}) {
+      const checklist = state.checklists.find(c => c.id === checklistId);
+      if (checklist) {
+        const checklistItemLocation = checklist.items.findIndex(x => x.itemId === itemId);
+        state.checklists.find(c => c.id === checklistId)!.items.splice(checklistItemLocation, 1);
+      }
+    },
+    updateChecklistItems(state: AppState, {items, checklistId}:{items: ChecklistItem[], checklistId: number}) {
+      state.checklists.map((c) => {
+        if (c.id === checklistId) {
+          c.items = items;
+        }
+        return c;
+      })
+    },
     updateChecklist(state: AppState, checklist: Checklist) {
       state.checklists.map((c) => {
         if (c.id === checklist.id) {
           Object.assign(c, checklist);
         }
+        return c;
       })
     },
     setAppMode(state: AppState, mode: "light" | "dark") {
@@ -74,6 +90,10 @@ export default new Vuex.Store<any>({
     },
     updateChecklistsInStorage({ getters }) {
       LocalStorageService.setData(checkListsKey, getters.checklists);
+    },
+    updateChecklistItems({commit, dispatch}, data:{items: ChecklistItem[], checklistId: number}) {
+      commit('updateChecklistItems', data);
+      dispatch('updateChecklistsInStorage');
     },
     saveChecklist({commit, dispatch}, checklist: Checklist) {
       commit('addChecklist', checklist);

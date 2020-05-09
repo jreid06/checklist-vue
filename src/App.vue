@@ -30,7 +30,7 @@
       <span class="ml-2">{{ time }}</span>
     </v-system-bar>
     <router-view></router-view>
-    <v-footer :padless="true" fixed="true">
+    <v-footer :padless="true" :fixed="true">
       <v-card
         flat
         tile

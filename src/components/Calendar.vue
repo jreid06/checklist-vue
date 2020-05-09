@@ -5,7 +5,7 @@
         <v-col cols="12">
           <v-toolbar
             flat
-            :color="!isDarkMode ? 'white' : ''"
+            :color="!isDarkMode ? 'white' : '#000'"
             :dark="isDarkMode"
           >
             <v-container>
@@ -206,7 +206,10 @@ export default class ChecklistCalendar extends Vue {
       items: event.items
     });
 
-    this.$emit("editChecklistItem", checklist.id);
+    this.$emit("editChecklistItem", {
+      id: checklist.id,
+      dialogName: "checklist"
+    });
   }
 
   getEventColor(event: ChecklistCalendarEvent) {
