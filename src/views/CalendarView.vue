@@ -71,6 +71,31 @@
                 </template>
               </div>
             </b-col>
+            <b-col cols="12" md="4" lg="12">
+              <h4>Completed</h4>
+              <v-divider />
+              <div :style="{ maxHeight: '300px', overflow: 'auto' }">
+                <template v-if="completed.length">
+                  <ChecklistCard
+                    v-for="checklist in completed"
+                    :checklist="checklist"
+                    :key="checklist.id"
+                    @editChecklist="onEditChecklistItem"
+                  />
+                </template>
+                <template v-else>
+                  <v-alert
+                    class=""
+                    type="info"
+                    outlined
+                    width="100%"
+                    elevation="2"
+                  >
+                    No completed checklists
+                  </v-alert>
+                </template>
+              </div>
+            </b-col>
           </b-row>
         </b-col>
       </b-row>
@@ -102,6 +127,14 @@ export default class CalendarView extends Vue {
 
   get isDarkMode(): boolean {
     return this.$store.getters.isDarkMode;
+  }
+
+  get completed(): Checklist[] {
+    return (this.$store.getters.getChecklists as Checklist[]).filter(
+      c =>
+        c.items.length &&
+        c.items.filter(ci => ci.itemStatus).length === c.items.length
+    );
   }
 
   get checklists(): Checklist[] {
