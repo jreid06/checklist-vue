@@ -1,9 +1,10 @@
 <template>
-  <div class="checklist-calendar mb-3">
+  <div class=" mb-3">
     <v-container>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" class="position-relative">
           <v-toolbar
+            class="w-100"
             flat
             :color="!isDarkMode ? 'white' : '#000'"
             :dark="isDarkMode"
@@ -14,7 +15,7 @@
                   <v-btn
                     class="mr-4"
                     :dark="isDarkMode"
-                    :outlined="!isDarkMode"
+                    :outlined="true"
                     @click="setToday"
                   >
                     Today
@@ -24,11 +25,7 @@
                 <v-col cols="6" md="2">
                   <v-menu bottom right :dark="isDarkMode">
                     <template v-slot:activator="{ on }">
-                      <v-btn
-                        v-on="on"
-                        :dark="isDarkMode"
-                        :outlined="!isDarkMode"
-                      >
+                      <v-btn v-on="on" :dark="isDarkMode" :outlined="true">
                         <span>{{ typeToLabel[type] }}</span>
                         <v-icon right>mdi-menu-down</v-icon>
                       </v-btn>
@@ -79,9 +76,9 @@
             </v-container>
           </v-toolbar>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" class="checklist-calendar">
           <v-calendar
-            class="checklist-calendar-component"
+            class="checklist-calendar-component mt-5"
             ref="calendar"
             :color="isDarkMode ? '#000' : '#fff'"
             :dark="isDarkMode"
@@ -208,7 +205,7 @@ export default class ChecklistCalendar extends Vue {
 
     this.$emit("editChecklistItem", {
       id: checklist.id,
-      dialogName: "checklist"
+      dialogName: "checklistItem"
     });
   }
 

@@ -24,7 +24,7 @@
             ></v-text-field>
           </div>
           <div class="d-flex align-items-center">
-            <v-btn color="primary" @click="addChecklistItem">
+            <v-btn color="primary" @click="addChecklistItem" :outlined="true">
               Add item
             </v-btn>
           </div>

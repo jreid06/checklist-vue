@@ -1,7 +1,7 @@
 <template>
   <div class="calendar-view pt-5 mb-5">
     <b-container class="mt-5 mb-5">
-      <b-row>
+      <!-- <b-row>
         <b-col>
           <v-btn
             type="info"
@@ -13,7 +13,7 @@
             Create checklist item
           </v-btn>
         </b-col>
-      </b-row>
+      </b-row> -->
       <b-row>
         <b-col order="2" order-md="1" cols="12" lg="8">
           <div class="m-auto">
@@ -115,12 +115,14 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import ChecklistCalendar from "@/components/Calendar.vue";
 import ChecklistDialog from "@/components/ChecklistDialog.vue";
 import ChecklistCard from "@/components/ChecklistCard.vue";
 import ChecklistItemDialog from "@/components/ChecklistItemsDialog.vue";
 import { Checklist } from "@/classes/Checklist";
+import { mixins } from "vue-class-component";
+import DialogMixin from "@/mixins/DialogMixin";
 
 @Component({
   components: {
@@ -130,10 +132,7 @@ import { Checklist } from "@/classes/Checklist";
     ChecklistItemDialog
   }
 })
-export default class CalendarView extends Vue {
-  isChecklistDialogOpen = false;
-  isChecklistItemDialogOpen = false;
-
+export default class CalendarView extends mixins(DialogMixin) {
   get isDarkMode(): boolean {
     return this.$store.getters.isDarkMode;
   }
@@ -188,36 +187,6 @@ export default class CalendarView extends Vue {
     if (day.length < 2) day = "0" + day;
 
     return [year, month, day].join("-");
-  }
-
-  get dialogMode(): "create" | "edit" {
-    return this.editableChecklist ? "edit" : "create";
-  }
-
-  get editableChecklist(): boolean {
-    return !!this.$store.getters.getEditableChecklist;
-  }
-
-  handleChecklistDialog(): void {
-    this.isChecklistDialogOpen = !this.isChecklistDialogOpen;
-
-    if (!this.isChecklistDialogOpen && this.editableChecklist) {
-      this.$store.commit("removeEditableChecklist");
-    }
-  }
-
-  handleChecklistItemDialog(): void {
-    this.isChecklistItemDialogOpen = !this.isChecklistItemDialogOpen;
-
-    if (!this.isChecklistItemDialogOpen && this.editableChecklist) {
-      this.$store.commit("removeEditableChecklist");
-    }
-  }
-
-  toggleDialog(dialogName: string): void {
-    if (dialogName === "checklist") this.handleChecklistDialog();
-
-    if (dialogName === "checklistItem") this.handleChecklistItemDialog();
   }
 
   onEditChecklistItem({
