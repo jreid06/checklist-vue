@@ -73,21 +73,13 @@
                   <template
                     v-else-if="isEditMode && formData.checklistItems.length"
                   >
-                    <div
+                    <ChecklistItem
+                      class="mr-2"
                       v-for="item in formData.checklistItems"
+                      :item="item"
                       :key="item.itemId"
-                      :style="{ height: '30px' }"
-                      class="d-flex mr-2 mb-2 border rounded"
-                    >
-                      <v-checkbox
-                        v-model="item.itemStatus"
-                        :label="item.itemName"
-                        class="checklist-checkbox mr-2"
-                      ></v-checkbox>
-                      <v-icon @click="deleteChecklistItem(item.itemId)">
-                        mdi-close-outline
-                      </v-icon>
-                    </div>
+                      @deleteChecklistItem="deleteChecklistItem"
+                    />
                   </template>
                   <template v-else>
                     <v-alert
@@ -147,7 +139,7 @@ import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import {
   Checklist,
   ChecklistDateTimeObject,
-  ChecklistItem,
+  ChecklistItem as ChecklistItemInterface,
   ChecklistInterface
 } from "../classes/Checklist";
 import DateTimePicker from "@/components/DateTimePicker.vue";
@@ -155,10 +147,12 @@ import {
   ChecklistFormData,
   ChecklistFormDataInterface
 } from "@/classes/ChecklistFormData";
+import ChecklistItem from "@/components/ChecklistItem.vue";
 
 @Component({
   components: {
-    DateTimePicker
+    DateTimePicker,
+    ChecklistItem
   }
 })
 export default class ChecklistDialog extends Vue {
@@ -223,7 +217,7 @@ export default class ChecklistDialog extends Vue {
 
   addChecklistItem(): void {
     if (!this.formData.checklistListItemName) return;
-    const item: ChecklistItem = {
+    const item: ChecklistItemInterface = {
       itemId: this.randomID(),
       itemName: this.formData.checklistListItemName,
       itemStatus: false
@@ -293,11 +287,4 @@ export default class ChecklistDialog extends Vue {
   }
 }
 </script>
-<style lang="scss">
-.checklist-checkbox {
-  .v-input__control {
-    position: relative;
-    top: -20px;
-  }
-}
-</style>
+<style lang="scss"></style>

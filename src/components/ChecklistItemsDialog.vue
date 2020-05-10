@@ -36,21 +36,12 @@
             <v-col cols="12">
               <div class="">
                 <template v-if="items.length">
-                  <div
+                  <ChecklistItem
                     v-for="item in items"
+                    :item="item"
                     :key="item.itemId"
-                    :style="{ height: '30px' }"
-                    class="d-flex mr-2 mb-2 border rounded"
-                  >
-                    <v-checkbox
-                      v-model="item.itemStatus"
-                      :label="item.itemName"
-                      class="checklist-checkbox mr-2"
-                    ></v-checkbox>
-                    <v-icon @click="deleteChecklistItem(item.itemId)">
-                      mdi-close-outline
-                    </v-icon>
-                  </div>
+                    @deleteChecklistItem="deleteChecklistItem"
+                  />
                 </template>
                 <template v-else>
                   <v-alert
@@ -85,20 +76,26 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
-import { Checklist, ChecklistItem } from "@/classes/Checklist";
+import {
+  Checklist,
+  ChecklistItem as ChecklistItemInterface
+} from "@/classes/Checklist";
+import ChecklistItem from "@/components/ChecklistItem.vue";
 
-@Component
+@Component({
+  components: { ChecklistItem }
+})
 export default class ChecklistItemsDialog extends Vue {
   @Prop({ default: "700px" }) maxWidth!: string;
   @Prop({ default: false }) dialogOpen!: boolean;
   @Prop({ default: false }) darkMode!: boolean;
 
-  items: ChecklistItem[] = [];
+  items: ChecklistItemInterface[] = [];
   formData: { itemName: string } = {
     itemName: ""
   };
 
-  @Watch("editableChecklist")
+  @Watch("editableChecklist", { deep: true })
   onEditchecklistChange(checklist: Checklist) {
     if (checklist) {
       this.items = JSON.parse(JSON.stringify(checklist.items));
@@ -114,12 +111,12 @@ export default class ChecklistItemsDialog extends Vue {
       return checklist;
     }
 
-    return checklist as undefined;
+    return undefined;
   }
 
   addChecklistItem(): void {
     if (!this.formData.itemName) return;
-    const item: ChecklistItem = {
+    const item: ChecklistItemInterface = {
       itemId: Date.now(),
       itemName: this.formData.itemName,
       itemStatus: false
