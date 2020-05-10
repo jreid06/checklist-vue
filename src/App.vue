@@ -30,6 +30,7 @@
       <span class="ml-2">{{ time }}</span>
     </v-system-bar>
     <router-view></router-view>
+    <ReloadSnackbar :snackbarOptions="snackbarOptions" />
     <v-footer :padless="true" :fixed="true">
       <v-card
         flat
@@ -50,8 +51,11 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
+import ReloadSnackbar, {
+  VuetifySnackbarInterface
+} from "@/components/ReloadSnackbar.vue";
 
-@Component
+@Component({ components: { ReloadSnackbar } })
 export default class App extends Vue {
   time = "00:00";
   modeState = false;
@@ -64,6 +68,14 @@ export default class App extends Vue {
     }
 
     this.$store.dispatch("updateAppMode", "dark");
+  }
+
+  get snackbarOptions(): VuetifySnackbarInterface {
+    return {
+      position: "bottom",
+      color: this.isDarkMode ? "#303030" : "info",
+      timeout: 0
+    };
   }
 
   get isDarkMode(): boolean {

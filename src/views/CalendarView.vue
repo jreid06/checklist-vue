@@ -5,6 +5,7 @@
         <b-col>
           <v-btn
             type="info"
+            class="mx-2"
             :outlined="isDarkMode ? false : true"
             :dark="isDarkMode"
             @click="toggleDialog('checklist')"

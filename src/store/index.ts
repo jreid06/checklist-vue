@@ -10,7 +10,8 @@ export default new Vuex.Store<any>({
     dataLoaded: false,
     checklists: [],
     selectedChecklist: null,
-    currentMode: 'light'
+    currentMode: 'light',
+    newContentAvailable: false
   },
   getters: {
     checklists: (state: AppState) => {
@@ -31,7 +32,8 @@ export default new Vuex.Store<any>({
     getAppMode: (state: AppState) => {
       return state.currentMode;
     },
-    isDarkMode: (state: AppState) => state.currentMode === 'dark'
+    isDarkMode: (state: AppState) => state.currentMode === 'dark',
+    isNewContentAvailable: (state: AppState) => state.newContentAvailable
   },
   mutations: {
     addChecklist(state: AppState, checklist: Checklist) {
@@ -78,9 +80,15 @@ export default new Vuex.Store<any>({
     },
     initChecklistsFromStorage(state: AppState, checklists: Checklist[]) {
       state.checklists = checklists;
+    },
+    setNewContentAvailable(state: AppState, available: boolean) {
+      state.newContentAvailable = available
     }
   },
   actions: {
+    newContentAvailable({commit}, available: boolean) {
+      commit('setNewContentAvailable', available);
+    },
     loadChecklists({commit}) {
       const savedChecklists = LocalStorageService.getData<ChecklistInterface[]>(checkListsKey)?.map((ci) => new Checklist(ci));
       if (savedChecklists) {
@@ -126,6 +134,7 @@ interface VueXCustom extends StoreOptions<any> {
 }
 
 interface AppState {
+    newContentAvailable: boolean;
     checklists: Checklist[],
     dataLoaded: boolean;
     selectedChecklist: Checklist | null;

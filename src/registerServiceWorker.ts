@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import { register } from "register-service-worker";
+import store from "./store";
 
 if (process.env.NODE_ENV === "production") {
   register(`${process.env.BASE_URL}service-worker.js`, {
@@ -12,6 +13,7 @@ if (process.env.NODE_ENV === "production") {
     },
     registered() {
       console.log("Service worker has been registered.");
+      store.dispatch('newContentAvailable', false);
     },
     cached() {
       console.log("Content has been cached for offline use.");
@@ -21,11 +23,7 @@ if (process.env.NODE_ENV === "production") {
     },
     updated() {
       console.log("New content is available; please refresh.");
-      console.log('reloading in a few seconds');
-      setTimeout(() => {
-        window.location.reload(true);
-      }, 4000);
-     
+      store.dispatch('newContentAvailable', true);     
     },
     offline() {
       console.log(
