@@ -6,7 +6,7 @@
     <!-- <div class="position-absolute bg-home"></div> -->
     <div class="app-home p-2 flex-grow-1 mt-5 pt-5">
       <h1 class="display-2">Checklist Calendar App</h1>
-      <h5>Download &amp; add to your home screen</h5>
+      <h5>Add to your home screen</h5>
       <div class="d-flex justify-content-center">
         <v-btn :dark="isDarkMode">
           <router-link :to="{ name: 'Calendar' }">
