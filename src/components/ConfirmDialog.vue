@@ -73,7 +73,7 @@ export default class ConfirmDialog extends Vue {
     if (this.dialogContentType === "deleteChecklist" && this.checklist) {
       return {
         dialogTitle: `Delete checklist <b>${this.checklist.title}</b>?`,
-        bodyText: `You wont be able to recover this checklist <b>${this.checklist.title}</b> once confirm has been clicked. All items attached to this checklist will aslo be deleted`,
+        bodyText: `You wont be able to recover checklist <b>${this.checklist.title}</b> once confirm has been clicked. All items attached to this checklist will also be deleted`,
         rejectText: "Close",
         confirmText: "Confirm",
         color: "success"
@@ -83,7 +83,7 @@ export default class ConfirmDialog extends Vue {
     if (this.dialogContentType === "deleteItem" && this.checklistItem) {
       return {
         dialogTitle: `Delete checklist item <b>${this.checklistItem.itemName}</b>?`,
-        bodyText: `You wont be able to recover deleted checklist item <b>${this.checklistItem.itemName}</b> once confirm has been clicked`,
+        bodyText: `You wont be able to recover checklist item <b>${this.checklistItem.itemName}</b> once confirm has been clicked`,
         rejectText: "Close",
         confirmText: "Confirm",
         color: "success"
