@@ -1,19 +1,6 @@
 <template>
   <div class="calendar-view pt-5 mb-5">
     <b-container class="mt-5 mb-5">
-      <!-- <b-row>
-        <b-col>
-          <v-btn
-            type="info"
-            class="mx-2"
-            :outlined="isDarkMode ? false : true"
-            :dark="isDarkMode"
-            @click="toggleDialog('checklist')"
-          >
-            Create checklist item
-          </v-btn>
-        </b-col>
-      </b-row> -->
       <b-row>
         <b-col order="2" order-md="1" cols="12" lg="8">
           <div class="m-auto">

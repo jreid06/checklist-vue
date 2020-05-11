@@ -1,145 +1,154 @@
 <template>
-  <v-dialog
-    v-model="dialogOpen"
-    scrollable
-    persistent
-    :max-width="maxWidth"
-    :dark="darkMode"
-  >
-    <v-card>
-      <v-card-title>
-        <span class="headline text-capitalize">{{ mode }} Checklist</span>
-      </v-card-title>
-      <v-card-text>
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                v-model="formData.checklistName"
-                label="Checklist Name"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" class="text-left">
-              <h6>Checklist Colour</h6>
-              <v-color-picker
-                v-model="formData.checklistColor"
-                class="checklist-dialog-form-item--color-picker"
-                hide-inputs
-                hide-canvas
-                width="100%"
-              ></v-color-picker>
-              <v-divider></v-divider>
-              <v-text-field
-                label="Selected Colour HEX Code"
-                :value="formData.checklistColor"
-                readonly
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <div class="">
-                <div class="d-flex">
-                  <div class="flex-grow-1 pr-4">
-                    <v-text-field
-                      v-model="formData.checklistListItemName"
-                      label="Checklist item name"
-                      required
-                      @keyup.13="addChecklistItem"
-                    ></v-text-field>
-                  </div>
-                  <div class="d-flex align-items-center">
-                    <v-btn
-                      color="primary"
-                      @click="addChecklistItem"
-                      :outlined="true"
-                    >
-                      Add item
-                    </v-btn>
-                  </div>
-                </div>
-                <div class="d-flex flex-wrap">
-                  <template
-                    v-if="!isEditMode && formData.checklistItems.length"
-                  >
-                    <template v-if="formData.checklistItems.length">
-                      <v-chip
-                        close
-                        close-icon="mdi-close-outline"
-                        v-for="item in formData.checklistItems"
-                        :key="item.itemId"
-                        class="mr-2 mb-2"
-                        @click:close="deleteChecklistItem(item.itemId)"
+  <div>
+    <v-dialog
+      v-model="dialogOpen"
+      scrollable
+      persistent
+      :max-width="maxWidth"
+      :dark="darkMode"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline text-capitalize">{{ mode }} Checklist</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="formData.checklistName"
+                  label="Checklist Name"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" class="text-left">
+                <h6>Checklist Colour</h6>
+                <v-color-picker
+                  v-model="formData.checklistColor"
+                  class="checklist-dialog-form-item--color-picker"
+                  hide-inputs
+                  hide-canvas
+                  width="100%"
+                ></v-color-picker>
+                <v-divider></v-divider>
+                <v-text-field
+                  label="Selected Colour HEX Code"
+                  :value="formData.checklistColor"
+                  readonly
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <div class="">
+                  <div class="d-flex">
+                    <div class="flex-grow-1 pr-4">
+                      <v-text-field
+                        v-model="formData.checklistListItemName"
+                        label="Checklist item name"
+                        required
+                        @keyup.13="addChecklistItem"
+                      ></v-text-field>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <v-btn
+                        color="primary"
+                        @click="addChecklistItem"
+                        :outlined="true"
                       >
-                        {{ item.itemName }}
-                      </v-chip>
-                    </template>
-                  </template>
-                  <template
-                    v-else-if="isEditMode && formData.checklistItems.length"
-                  >
-                    <ChecklistItem
-                      class="mr-2"
-                      v-for="item in formData.checklistItems"
-                      :item="item"
-                      :key="item.itemId"
-                      @deleteChecklistItem="deleteChecklistItem"
-                    />
-                  </template>
-                  <template v-else>
-                    <v-alert
-                      class=""
-                      type="info"
-                      outlined
-                      width="100%"
-                      elevation="2"
+                        Add item
+                      </v-btn>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-wrap">
+                    <template
+                      v-if="!isEditMode && formData.checklistItems.length"
                     >
-                      No list items created
-                    </v-alert>
-                  </template>
+                      <template v-if="formData.checklistItems.length">
+                        <v-chip
+                          close
+                          close-icon="mdi-close-outline"
+                          v-for="item in formData.checklistItems"
+                          :key="item.itemId"
+                          class="mr-2 mb-2"
+                          @click:close="deleteChecklistItem(item.itemId)"
+                        >
+                          {{ item.itemName }}
+                        </v-chip>
+                      </template>
+                    </template>
+                    <template
+                      v-else-if="isEditMode && formData.checklistItems.length"
+                    >
+                      <ChecklistItem
+                        class="mr-2"
+                        v-for="item in formData.checklistItems"
+                        :item="item"
+                        :key="item.itemId"
+                        @deleteChecklistItem="deleteChecklistItem"
+                      />
+                    </template>
+                    <template v-else>
+                      <v-alert
+                        class=""
+                        type="info"
+                        outlined
+                        width="100%"
+                        elevation="2"
+                      >
+                        No list items created
+                      </v-alert>
+                    </template>
+                  </div>
                 </div>
-              </div>
-            </v-col>
-            <v-col cols="12">
-              <v-divider></v-divider>
-              <DateTimePicker
-                :dateObject="formData.checklistDates"
-                :resetPicker="reset"
-                @dateTimeChange="updateDateTimes"
-                @pickerReset="reset = false"
-              />
-            </v-col>
-            <v-col cols="12">
-              <v-textarea
-                name="input-7-1"
-                label="Description (optional)"
-                auto-grow
-                v-model="formData.checklistDescription"
-              ></v-textarea>
-            </v-col>
-          </v-row>
-        </v-container>
-        <small>*indicates required field</small>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="emitClose">Close</v-btn>
-        <v-btn color="blue darken-1" text @click="handleChecklistSubmission">
-          {{ buttonActionText }}
-        </v-btn>
-        <v-btn
-          v-if="isEditMode"
-          color="red darken-1"
-          text
-          @click="deleteChecklist"
-        >
-          Delete Checklist
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+              </v-col>
+              <v-col cols="12">
+                <v-divider></v-divider>
+                <DateTimePicker
+                  :dateObject="formData.checklistDates"
+                  :resetPicker="reset"
+                  @dateTimeChange="updateDateTimes"
+                  @pickerReset="reset = false"
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  name="input-7-1"
+                  label="Description (optional)"
+                  auto-grow
+                  v-model="formData.checklistDescription"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="emitClose">Close</v-btn>
+          <v-btn color="blue darken-1" text @click="handleChecklistSubmission">
+            {{ buttonActionText }}
+          </v-btn>
+          <v-btn
+            v-if="isEditMode"
+            color="red darken-1"
+            text
+            @click="handleDeleteChecklist"
+          >
+            Delete Checklist
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <ConfirmDialog
+      dialogContentType="deleteChecklist"
+      :checklist="itemToDelete"
+      :dialogOpen="isConfirmDialogOpen"
+      @reject="toggleDialog('confirm')"
+      @confirm="deleteChecklist"
+    />
+  </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import {
   Checklist,
   ChecklistDateTimeObject,
@@ -152,14 +161,18 @@ import {
   ChecklistFormDataInterface
 } from "@/classes/ChecklistFormData";
 import ChecklistItem from "@/components/ChecklistItem.vue";
+import { mixins } from "vue-class-component";
+import DialogMixin from "../mixins/DialogMixin";
+import ConfirmDialog from "./ConfirmDialog.vue";
 
 @Component({
   components: {
     DateTimePicker,
-    ChecklistItem
+    ChecklistItem,
+    ConfirmDialog
   }
 })
-export default class ChecklistDialog extends Vue {
+export default class ChecklistDialog extends mixins(DialogMixin) {
   @Prop({ default: false }) dialogOpen!: boolean;
   @Prop({ default: false }) darkMode!: boolean;
   @Prop({ default: "700px" }) maxWidth!: string;
@@ -173,6 +186,7 @@ export default class ChecklistDialog extends Vue {
   };
   formData: ChecklistFormData = new ChecklistFormData(null);
   reset = false;
+  itemToDelete: Checklist | null = null;
 
   @Watch("editableChecklist", { immediate: true })
   onEditMode(checklist: Checklist | undefined) {
@@ -186,6 +200,7 @@ export default class ChecklistDialog extends Vue {
         checklistListItemName: ""
       };
 
+      this.itemToDelete = checklist;
       this.formData = new ChecklistFormData(formDataInterface);
     }
   }
@@ -282,11 +297,19 @@ export default class ChecklistDialog extends Vue {
     this.emitClose();
   }
 
+  handleDeleteChecklist(): void {
+    if (this.editableChecklist) {
+      this.itemToDelete = this.editableChecklist;
+      this.toggleDialog("confirm");
+    }
+  }
+
   deleteChecklist(): void {
     this.editableChecklist
       ? this.$store.dispatch("deleteChecklist", this.editableChecklist.id)
       : null;
 
+    this.toggleDialog("confirm");
     this.closeDialogActions();
   }
 }

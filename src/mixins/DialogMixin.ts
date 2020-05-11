@@ -6,12 +6,12 @@ export default class DialogMixin extends Vue {
     isChecklistItemDialogOpen = false;
     isConfirmDialogOpen = false;
 
-    get editableChecklist(): boolean {
+    get editableChecklistExists(): boolean {
         return !!this.$store.getters.getEditableChecklist;
     }
 
     get dialogMode(): "create" | "edit" {
-        return this.editableChecklist ? "edit" : "create";
+        return this.editableChecklistExists ? "edit" : "create";
     }
 
     handleConfirmDialog(): void {
@@ -21,7 +21,7 @@ export default class DialogMixin extends Vue {
     handleChecklistDialog(): void {
         this.isChecklistDialogOpen = !this.isChecklistDialogOpen;
 
-        if (!this.isChecklistDialogOpen && this.editableChecklist) {
+        if (!this.isChecklistDialogOpen && this.editableChecklistExists) {
             this.$store.commit("removeEditableChecklist");
         }
     }
@@ -29,7 +29,7 @@ export default class DialogMixin extends Vue {
     handleChecklistItemDialog(): void {
         this.isChecklistItemDialogOpen = !this.isChecklistItemDialogOpen;
 
-        if (!this.isChecklistItemDialogOpen && this.editableChecklist) {
+        if (!this.isChecklistItemDialogOpen && this.editableChecklistExists) {
             this.$store.commit("removeEditableChecklist");
         }
     }

@@ -13,6 +13,7 @@
       @closeDialog="toggleDialog('checklist')"
     />
     <ConfirmDialog
+      dialogContentType="resetApp"
       :dialogOpen="isConfirmDialogOpen"
       @reject="toggleDialog('confirm')"
       @confirm="deleteAppData"
