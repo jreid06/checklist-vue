@@ -1,64 +1,67 @@
 <template>
   <div class="date-time-picker--wrapper">
-    <div class="d-flex flex-wrap mb-4">
-      <v-sheet
-        :dark="isDarkMode"
-        :elevation="elevation"
-        class="mx-auto p-3"
-        width="100%"
-      >
-        <div class="flex-grow-1 mr-1 w-100">
-          <DatePicker
-            pickerLabel="Start Date"
-            :value="picker.startDate"
-            @dateUpdated="handleDateUpdates"
-            keyToUpdate="startDate"
-          />
-          <DateTimeToolbar
-            :keyName="'startDate'"
-            @updateDate="handleDateUpdates"
-          />
-        </div>
-        <!--  -->
-        <div class="flex-grow-1 ml-1 mt-2">
-          <TimePicker
-            pickerLabel="Start Time"
-            @dateUpdated="handleDateUpdates"
-            keyToUpdate="startTime"
-          />
-        </div>
-      </v-sheet>
-    </div>
-
-    <div class="d-flex flex-wrap">
-      <v-sheet
-        :dark="isDarkMode"
-        :elevation="elevation"
-        class="mx-auto p-3"
-        width="100%"
-      >
-        <div class="flex-grow-1 mr-1 w-100">
-          <DatePicker
-            pickerLabel="End Date"
-            :value="picker.endDate"
-            @dateUpdated="handleDateUpdates"
-            keyToUpdate="endDate"
-          />
-          <DateTimeToolbar
-            :keyName="'endDate'"
-            @updateDate="handleDateUpdates"
-          />
-        </div>
-        <!--  -->
-        <div class="flex-grow-1 ml-1 mt-2">
-          <TimePicker
-            pickerLabel="End Time"
-            @dateUpdated="handleDateUpdates"
-            keyToUpdate="endTime"
-          />
-        </div>
-      </v-sheet>
-    </div>
+    <v-container>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-sheet
+            :dark="isDarkMode"
+            :elevation="elevation"
+            class="mx-auto p-3"
+            width="100%"
+          >
+            <div class="flex-grow-1 mr-1 w-100">
+              <DatePicker
+                pickerLabel="Start Date"
+                :value="picker.startDate"
+                @dateUpdated="handleDateUpdates"
+                keyToUpdate="startDate"
+              />
+              <DateTimeToolbar
+                :keyName="'startDate'"
+                @updateDate="handleDateUpdates"
+              />
+            </div>
+            <!--  -->
+            <div class="flex-grow-1 ml-1 mt-2">
+              <TimePicker
+                pickerLabel="Start Time"
+                @dateUpdated="handleDateUpdates"
+                keyToUpdate="startTime"
+              />
+            </div>
+          </v-sheet>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-sheet
+            :dark="isDarkMode"
+            :elevation="elevation"
+            class="mx-auto p-3"
+            width="100%"
+          >
+            <div class="flex-grow-1 mr-1 w-100">
+              <DatePicker
+                pickerLabel="End Date"
+                :value="picker.endDate"
+                @dateUpdated="handleDateUpdates"
+                keyToUpdate="endDate"
+              />
+              <DateTimeToolbar
+                :keyName="'endDate'"
+                @updateDate="handleDateUpdates"
+              />
+            </div>
+            <!--  -->
+            <div class="flex-grow-1 ml-1 mt-2">
+              <TimePicker
+                pickerLabel="End Time"
+                @dateUpdated="handleDateUpdates"
+                keyToUpdate="endTime"
+              />
+            </div>
+          </v-sheet>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 <script lang="ts">

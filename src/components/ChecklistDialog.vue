@@ -21,16 +21,24 @@
                   required
                 ></v-text-field>
               </v-col>
+              <v-col cols="12">
+                <v-divider></v-divider>
+                <DateTimePicker
+                  :dateObject="formData.checklistDates"
+                  :resetPicker="reset"
+                  @dateTimeChange="updateDateTimes"
+                  @pickerReset="reset = false"
+                />
+              </v-col>
               <v-col cols="12" class="text-left">
                 <h6>Checklist Colour</h6>
                 <v-color-picker
                   v-model="formData.checklistColor"
-                  class="checklist-dialog-form-item--color-picker"
+                  class="checklist-dialog-form-item--color-picker mb-5"
                   hide-inputs
                   hide-canvas
                   width="100%"
                 ></v-color-picker>
-                <v-divider></v-divider>
                 <v-text-field
                   label="Selected Colour HEX Code"
                   :value="formData.checklistColor"
@@ -101,15 +109,6 @@
                 </div>
               </v-col>
               <v-col cols="12">
-                <v-divider></v-divider>
-                <DateTimePicker
-                  :dateObject="formData.checklistDates"
-                  :resetPicker="reset"
-                  @dateTimeChange="updateDateTimes"
-                  @pickerReset="reset = false"
-                />
-              </v-col>
-              <v-col cols="12">
                 <v-textarea
                   name="input-7-1"
                   label="Description (optional)"
@@ -145,6 +144,12 @@
       @reject="toggleDialog('confirm')"
       @confirm="deleteChecklist"
     />
+    <v-snackbar v-model="snackbar" :top="true" :timeout="0" color="#a82e28">
+      <b>Name, Start & End date are required</b>
+      <v-btn dark text @click="snackbar = false">
+        Close
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 <script lang="ts">
@@ -186,6 +191,7 @@ export default class ChecklistDialog extends mixins(DialogMixin) {
   };
   formData: ChecklistFormData = new ChecklistFormData(null);
   reset = false;
+  snackbar = false;
   itemToDelete: Checklist | null = null;
 
   @Watch("editableChecklist", { immediate: true })
@@ -276,9 +282,10 @@ export default class ChecklistDialog extends mixins(DialogMixin) {
 
     if (
       !this.formData.checklistName ||
-      !this.formData.checklistDates.startDate
+      !this.formData.checklistDates.startDate ||
+      !this.formData.checklistDates.endDate
     ) {
-      alert("missing fields");
+      this.snackbar = true;
       return;
     }
 
