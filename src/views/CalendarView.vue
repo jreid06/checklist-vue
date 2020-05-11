@@ -136,44 +136,21 @@ export default class CalendarView extends mixins(DialogMixin) {
     return this.$store.getters.getChecklists;
   }
 
+  dateSpansCurrentDay(_startDate: string, _endDate: string) {
+    const startDate = new Date(_startDate);
+    const endDate = new Date(_endDate);
+    const today = new Date();
+
+    return (
+      today.getDate() === startDate.getDate() ||
+      (today > startDate && today < endDate)
+    );
+  }
+
   get todaysChecklists(): Checklist[] {
-    return (this.$store.getters.getChecklists as Checklist[]).filter(c => {
-      return (
-        new Date(c.dates.startDate).getDay() === new Date(Date.now()).getDay()
-      );
+    return this.checklists.filter(c => {
+      return this.dateSpansCurrentDay(c.dates.startDate, c.dates.endDate);
     });
-  }
-
-  checkIfDateIsBetweenCurrentDay(startDate: string, endDate: string): boolean {
-    const dateFrom = startDate;
-    const dateTo = endDate;
-    const dateCheck = this.formatDate(Date.now());
-
-    const d1 = dateFrom.split("/");
-    const d2 = dateTo.split("/");
-    const c = dateCheck.split("/");
-
-    const from = new Date(
-      parseInt(d1[2]),
-      parseInt(d1[1]) - 1,
-      parseInt(d1[0])
-    ); // -1 because months are from 0 to 11
-    const to = new Date(parseInt(d2[2]), parseInt(d2[1]) - 1, parseInt(d2[0]));
-    const check = new Date(parseInt(c[2]), parseInt(c[1]) - 1, parseInt(c[0]));
-
-    return check > from && check < to;
-  }
-
-  formatDate(date: string | number) {
-    const d = new Date(date);
-    let month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate();
-    const year = d.getFullYear();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [year, month, day].join("-");
   }
 
   onEditChecklistItem({
@@ -191,12 +168,6 @@ export default class CalendarView extends mixins(DialogMixin) {
       );
       this.toggleDialog(dialogName);
     }
-  }
-
-  addDays(date: Date, days: number) {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
   }
 }
 </script>
