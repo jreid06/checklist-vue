@@ -104,7 +104,7 @@ import { CalendarEvent, CalendarTimestamp } from "vuetify";
 import {
   Checklist,
   ChecklistDateTimeObject,
-  ChecklistItem
+  ChecklistItem,
 } from "../classes/Checklist";
 
 interface ChecklistCalendarEvent extends CalendarEvent {
@@ -125,12 +125,12 @@ export default class ChecklistCalendar extends Vue {
     month: "Month",
     week: "Week",
     day: "Day",
-    "4day": "4 Days"
+    "4day": "4 Days",
   };
   mode = "stack";
   currentdate = {
     month: "xcvxv",
-    year: 0
+    year: 0,
   };
   start: string | null = null;
   end: string | null = null;
@@ -138,7 +138,7 @@ export default class ChecklistCalendar extends Vue {
   weekdays = [
     { text: "Mon - Sun", value: [1, 2, 3, 4, 5, 6, 0] },
     { text: "Mon - Fri", value: [1, 2, 3, 4, 5] },
-    { text: "Sat & Sun", value: [6, 0] }
+    { text: "Sat & Sun", value: [6, 0] },
   ];
   value = "";
 
@@ -150,7 +150,7 @@ export default class ChecklistCalendar extends Vue {
     return `${new Date(this.currentdate.month || Date.now()).toLocaleString(
       "default",
       {
-        month: "long"
+        month: "long",
       }
     )} ${this.currentdate.year || new Date(Date.now()).getFullYear()}`;
   }
@@ -162,29 +162,29 @@ export default class ChecklistCalendar extends Vue {
 
   get allEvents(): ChecklistCalendarEvent[] {
     const checklists = this.$store.getters.getChecklists as Checklist[];
-    return checklists.map(c => {
+    return checklists.map((c) => {
       const { dates } = c;
       const { startTime, startDate, endTime, endDate } = dates;
 
-      const startDateFormatted =
-        startDate && !!startTime
-          ? this.formatDate(new Date(`${startDate} ${startTime}`), !!startTime)
-          : this.formatDate(new Date(startDate!), false);
+      // const startDateFormatted =
+      //   startDate && !!startTime
+      //     ? this.formatDate(new Date(`${startDate} ${startTime}`), !!startTime)
+      //     : this.formatDate(new Date(startDate!), false);
 
-      const endDateFormatted =
-        endDate && !!endTime
-          ? this.formatDate(new Date(`${endDate} ${endTime}`), !!endTime)
-          : this.formatDate(new Date(endDate!), false);
+      // const endDateFormatted =
+      //   endDate && !!endTime
+      //     ? this.formatDate(new Date(`${endDate} ${endTime}`), !!endTime)
+      //     : this.formatDate(new Date(endDate!), false);
 
       return {
         name: c.title,
-        start: startDateFormatted,
-        end: endDateFormatted,
+        start: `${startDate} ${startTime}`,
+        end: `${endDate} ${endTime}`,
         color: c.color,
         dates: c.dates,
         id: c.id,
         description: c.description,
-        items: c.items
+        items: c.items,
       } as ChecklistCalendarEvent;
     });
   }
@@ -200,12 +200,12 @@ export default class ChecklistCalendar extends Vue {
       dates: event.dates,
       description: event.description,
       id: event.id,
-      items: event.items
+      items: event.items,
     });
 
     this.$emit("editChecklistItem", {
       id: checklist.id,
-      dialogName: "checklistItem"
+      dialogName: "checklistItem",
     });
   }
 
@@ -215,8 +215,16 @@ export default class ChecklistCalendar extends Vue {
 
   formatDate(a: Date, withTime: boolean) {
     return withTime
-      ? `${a.getFullYear()}-${a.getMonth() +
-          1}-${a.getDate()} ${a.getHours()}:${a.getMinutes()}`
+      ? a.getFullYear() +
+          "-" +
+          a.getMonth() +
+          1 +
+          "-" +
+          a.getDate() +
+          " " +
+          a.getHours() +
+          ":" +
+          a.getMinutes()
       : `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()}`;
   }
 }
