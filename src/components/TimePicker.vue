@@ -67,6 +67,12 @@ export default class TimePicker extends Vue {
   @Prop({ required: true }) keyToUpdate!: string;
   @Prop({ default: "custom label" }) pickerLabel!: string;
   @Prop({ default: "dialog" }) type!: "dialog" | "menu";
+  @Prop({ required: true }) value!: string;
+
+  @Watch("value", { immediate: true })
+  onValueChange(value: string) {
+    this.date = value;
+  }
 
   @Watch("date", { deep: true })
   onDateChange(date: string) {

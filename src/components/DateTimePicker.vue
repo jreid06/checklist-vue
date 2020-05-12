@@ -24,6 +24,7 @@
             <!--  -->
             <div class="flex-grow-1 ml-1 mt-2">
               <TimePicker
+                :value="picker.startTime"
                 pickerLabel="Start Time"
                 @dateUpdated="handleDateUpdates"
                 keyToUpdate="startTime"
@@ -53,6 +54,7 @@
             <!--  -->
             <div class="flex-grow-1 ml-1 mt-2">
               <TimePicker
+                :value="picker.endTime"
                 pickerLabel="End Time"
                 @dateUpdated="handleDateUpdates"
                 keyToUpdate="endTime"
