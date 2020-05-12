@@ -7,34 +7,63 @@
       :max-width="maxWidth"
       :dark="darkMode"
     >
-      <v-card v-if="editableChecklist">
-        <v-card-title>
-          <v-list-item-avatar :color="editableChecklist.color">
-          </v-list-item-avatar>
-          <span class="headline text-capitalize">{{
-            editableChecklist.title
-          }}</span>
-          <v-spacer></v-spacer>
-          <div class="d-flex">
-            <div class="flex-grow-1 pr-4">
-              <v-text-field
-                v-model="formData.itemName"
-                label="Checklist item name"
-                required
-                @keyup.13="addChecklistItem"
-              ></v-text-field>
-            </div>
-            <div class="d-flex align-items-center">
-              <v-btn color="primary" @click="addChecklistItem" :outlined="true">
-                Add item
-              </v-btn>
-            </div>
-          </div>
-        </v-card-title>
-        <v-card-text>
+      <v-card v-if="editableChecklist && checklistFormattedDate">
+        <v-card-title class="pb-0">
           <v-container>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="12" class="pb-0">
+                <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
+                  <div class="d-flex w-100">
+                    <v-list-item-avatar :color="editableChecklist.color">
+                    </v-list-item-avatar>
+                    <span class="headline text-capitalize">{{
+                      editableChecklist.title
+                    }}</span>
+                    <v-spacer></v-spacer>
+                  </div>
+
+                  <div class="d-flex flex-wrap justify-content-end">
+                    <span
+                      class="headline text-capitalize font-italic"
+                      :style="{ fontSize: '12px !important' }"
+                      >{{ "Start: " + checklistFormattedDate.startDate }}</span
+                    >
+                    <span
+                      class="headline text-capitalize font-italic"
+                      :style="{ fontSize: '12px !important' }"
+                      >{{ "End: " + checklistFormattedDate.endDate }}</span
+                    >
+                  </div>
+                </div>
+              </v-col>
+              <v-col cols="12" class="pt-0">
+                <div class="d-flex">
+                  <div class="flex-grow-1 pr-4">
+                    <v-text-field
+                      v-model="formData.itemName"
+                      label="Checklist item name"
+                      required
+                      @keyup.13="addChecklistItem"
+                    ></v-text-field>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <v-btn
+                      color="primary"
+                      @click="addChecklistItem"
+                      :outlined="true"
+                    >
+                      Add item
+                    </v-btn>
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-title>
+        <v-card-text class="p-2">
+          <v-container>
+            <v-row>
+              <v-col cols="12" class="pt-0">
                 <div class="">
                   <template v-if="items.length">
                     <ChecklistItem
@@ -106,6 +135,35 @@ export default class ChecklistItemsDialog extends mixins(DialogMixin) {
   @Prop({ default: false }) dialogOpen!: boolean;
   @Prop({ default: false }) darkMode!: boolean;
 
+  mL = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+  mS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+
   itemToDelete: ChecklistItemInterface | null = null;
   items: ChecklistItemInterface[] = [];
   formData: { itemName: string } = {
@@ -119,6 +177,37 @@ export default class ChecklistItemsDialog extends mixins(DialogMixin) {
     }
   }
 
+  get checklistFormattedDate(): { startDate: string; endDate: string } | null {
+    // setup
+    if (this.editableChecklist) {
+      const {
+        startTime,
+        startDate,
+        endTime,
+        endDate
+      } = this.editableChecklist.dates;
+      const hasStartTime = !!startTime;
+      const hasEndTime = !!endTime;
+
+      const startDateString = this.formatDate(
+        new Date(startDate),
+        hasStartTime,
+        startTime
+      );
+      const endDateString = this.formatDate(
+        new Date(endDate),
+        hasEndTime,
+        endTime
+      );
+
+      return {
+        endDate: endDateString,
+        startDate: startDateString
+      };
+    }
+    return null;
+  }
+
   get editableChecklist(): Checklist | undefined {
     const checklist = this.$store.getters.getEditableChecklist as
       | Checklist
@@ -129,6 +218,12 @@ export default class ChecklistItemsDialog extends mixins(DialogMixin) {
     }
 
     return undefined;
+  }
+
+  formatDate(a: Date, withTime: boolean, time: string | null) {
+    return withTime
+      ? `${this.mL[a.getMonth()]} ${a.getDate()}, ${a.getFullYear()} ${time}`
+      : `${this.mL[a.getMonth()]} ${a.getDate()}, ${a.getFullYear()}`;
   }
 
   addChecklistItem(): void {
