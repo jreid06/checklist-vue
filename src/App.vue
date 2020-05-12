@@ -101,10 +101,12 @@ export default class App extends mixins(DialogMixin) {
   updateCurrentMode(mode: boolean) {
     if (!mode) {
       this.$store.dispatch("updateAppMode", "light");
+      this.updateTheme("#fff");
       return;
     }
 
     this.$store.dispatch("updateAppMode", "dark");
+    this.updateTheme("#000");
   }
 
   get snackbarOptions(): VuetifySnackbarInterface {
@@ -113,6 +115,15 @@ export default class App extends mixins(DialogMixin) {
       color: this.isDarkMode ? "#303030" : "info",
       timeout: 0
     };
+  }
+
+  updateTheme(mode: string) {
+    const metaTagThemeColor = document.querySelector(
+      'meta[name="theme-color"]'
+    );
+    if (metaTagThemeColor) {
+      metaTagThemeColor.setAttribute("content", mode);
+    }
   }
 
   get isMobile(): boolean {
